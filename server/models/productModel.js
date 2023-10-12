@@ -22,14 +22,15 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    discount: {
+      type: Number,
+      default: 0,
+    },
+    storageCapacity: { type: String, required: true },
     category: { type: String, required: true },
-    variants: [
+    colors: [
       {
-        color: {
-          type: String,
-          required: true,
-        },
-        storageCapacity: {
+        name: {
           type: String,
           required: true,
         },
@@ -37,13 +38,9 @@ const productSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
-        discount: {
-          type: Number,
-          default: 0,
-        },
         quantity: {
           type: Number,
-          required: true,
+          default: 10,
         },
       },
     ],
