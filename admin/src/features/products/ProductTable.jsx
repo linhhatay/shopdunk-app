@@ -1,4 +1,8 @@
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
+import { getProducts } from "../../services/apiProducts";
+import Spinner from "../../ui/Spinner";
+import ProductRow from "./ProductRow";
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -23,3 +27,33 @@ const TableHeader = styled.header`
   color: var(--color-grey-600);
   padding: 1.6rem 2.4rem;
 `;
+
+function ProductTable() {
+  const {
+    isLoading,
+    data: products,
+    error,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: getProducts,
+  });
+
+  if (isLoading) return <Spinner />;
+  return (
+    <Table role="table">
+      <TableHeader role="row">
+        <div></div>
+        <div>Name</div>
+        <div>Image</div>
+        <div>Category</div>
+        <div>Discount</div>
+        <div></div>
+      </TableHeader>
+      {products.data.data.map((product) => (
+        <ProductRow product={product} key={product._id} />
+      ))}
+    </Table>
+  );
+}
+
+export default ProductTable;
