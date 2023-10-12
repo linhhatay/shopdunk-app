@@ -1,5 +1,4 @@
 import { toast } from "react-hot-toast";
-import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
@@ -9,42 +8,7 @@ import Textarea from "../../ui/Textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProduct } from "../../services/apiProducts";
 import { useState } from "react";
-
-const FormRow = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 24rem 1fr 1.2fr;
-  gap: 2.4rem;
-
-  padding: 1.2rem 0;
-
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    padding-bottom: 0;
-  }
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-
-  &:has(button) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1.2rem;
-  }
-`;
-
-const Label = styled.label`
-  font-weight: 500;
-`;
-
-const Error = styled.span`
-  font-size: 1.4rem;
-  color: var(--color-red-700);
-`;
+import FormRow from "../../ui/FormRow";
 
 function CreateProductForm() {
   const queryClient = useQueryClient();
@@ -61,7 +25,8 @@ function CreateProductForm() {
     },
   });
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, formState } = useForm();
+  const { errors } = formState;
   const [variantForms, setVariantForms] = useState([]);
   const [colors, setColors] = useState([]);
 
@@ -99,41 +64,52 @@ function CreateProductForm() {
     mutate(formData);
   }
 
+  function onError(errors) {}
+
   const addVariantForm = () => {
     // Tạo một form biến thể mới và thêm vào danh sách
     const newIndex = variantForms.length;
     const newForm = (
       <div key={newIndex}>
-        <FormRow>
-          <Label htmlFor={`color${newIndex}`}>Color</Label>
+        <FormRow label={"Color"} error={errors?.color[newIndex]?.message}>
           <Input
             type="text"
             id={`color${newIndex}`}
-            {...register(`color[${newIndex}]`)}
+            {...register(`color[${newIndex}]`, {
+              required: "This field is required",
+            })}
             onChange={(e) => {
               // Cập nhật tên màu vào mảng colors khi thay đổi giá trị trường màu
               const newColors = [...colors];
               newColors[newIndex] = e.target.value;
               setColors(newColors);
             }}
+            disabled={isCreating}
           />
         </FormRow>
 
-        <FormRow>
-          <Label htmlFor={`price${newIndex}`}>Price</Label>
+        <FormRow label={"Price"} error={errors?.price[newIndex]?.message}>
           <Input
             type="number"
             id={`price${newIndex}`}
-            {...register(`price[${newIndex}]`)}
+            {...register(`price[${newIndex}]`, {
+              required: "This field is required",
+              min: {
+                value: 1,
+                message: "Price should be at least 1",
+              },
+            })}
+            disabled={isCreating}
           />
         </FormRow>
 
-        <FormRow>
-          <Label htmlFor={`quantity${newIndex}`}>Quantity</Label>
+        <FormRow label={"Quantity"}>
           <Input
             type="number"
             id={`quantity${newIndex}`}
             {...register(`quantity[${newIndex}]`)}
+            defaultValue={10}
+            disabled={isCreating}
           />
         </FormRow>
 
@@ -161,60 +137,95 @@ function CreateProductForm() {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow>
-        <Label htmlFor="name">Name</Label>
-        <Input type="text" id="name" {...register("name")} />
-      </FormRow>
-
-      <FormRow>
-        <Label htmlFor="maxCapacity">Storage capacity</Label>
+    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <FormRow label={"Name"} error={errors?.name?.message}>
         <Input
           type="text"
-          id="storageCapacity"
-          {...register("storageCapacity")}
+          id="name"
+          {...register("name", {
+            required: "This field is required",
+          })}
+          disabled={isCreating}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="category">Category</Label>
+      <FormRow
+        label={"Storage capacity"}
+        error={errors?.storageCapacity?.message}
+      >
+        <Input
+          type="text"
+          id="storageCapacity"
+          {...register("storageCapacity", {
+            required: "This field is required",
+          })}
+          disabled={isCreating}
+        />
+      </FormRow>
+
+      <FormRow label={"Category"} error={errors?.category?.message}>
         <Input
           type="text"
           id="category"
           defaultValue=""
-          {...register("category")}
+          {...register("category", {
+            required: "This field is required",
+          })}
+          disabled={isCreating}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="description">Description for website</Label>
+      <FormRow
+        label={"Description for website"}
+        error={errors?.description?.message}
+      >
         <Textarea
           type="text"
           id="description"
           defaultValue=""
-          {...register("description")}
+          {...register("description", {
+            required: "This field is required",
+          })}
+          disabled={isCreating}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="discount">Discount</Label>
-        <Input type="number" id="discount" {...register("discount")} />
+      <FormRow label={"Discount"} error={errors?.discount?.message}>
+        <Input
+          type="number"
+          id="discount"
+          {...register("discount", {
+            max: {
+              value: 99,
+              message: "Discount must be greater than 100",
+            },
+          })}
+          defaultValue={0}
+          disabled={isCreating}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="imageCover">Image Cover</Label>
+      <FormRow label={"Image Cover"} error={errors?.imageCover?.message}>
         <FileInput
           type="file"
           id="imageCover"
           accept="image/*"
-          {...register("imageCover")}
+          {...register("imageCover", {
+            required: "This field is required",
+          })}
+          disabled={isCreating}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="images">Images</Label>
-        <FileInput id="images" accept="image/*" {...register("images")} />
+      <FormRow label={"Images"}>
+        <FileInput
+          id="images"
+          accept="image/*"
+          {...register("images")}
+          disabled={isCreating}
+        />
       </FormRow>
+
       <FormRow>
         <Button type="button" onClick={addVariantForm}>
           Add variant
