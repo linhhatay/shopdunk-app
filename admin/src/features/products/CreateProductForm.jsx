@@ -1,35 +1,21 @@
-import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
+
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createProduct, editProduct } from "../../services/apiProducts";
 import { useState } from "react";
 import FormRow from "../../ui/FormRow";
+import { useCreateProduct } from "./useCreateProduct";
+import { useEditProduct } from "./useEditProduct";
 
 function CreateProductForm({ productToEdit = {} }) {
   const { _id: editId, ...editValues } = productToEdit;
   const isEditSession = Boolean(editId);
-  const queryClient = useQueryClient();
-
-  const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: isEditSession ? editProduct : createProduct,
-    onSuccess: () => {
-      toast.success(
-        isEditSession
-          ? "Product successfully updated"
-          : "New product successfully created"
-      );
-      queryClient.invalidateQueries({ queryKey: "products" });
-      if (isEditSession) reset();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const { isCreating, createProduct } = useCreateProduct();
+  const { isEditing, editProduct } = useEditProduct();
+  const isWorking = isEditing || isCreating;
 
   const { register, handleSubmit, reset, formState } = useForm({
     defaultValues: isEditSession ? editValues : {},
@@ -71,11 +57,11 @@ function CreateProductForm({ productToEdit = {} }) {
 
     if (isEditSession) {
       // console.log({ ...data, editId });
-      mutate({ ...data, editId });
+      editProduct({ ...data, editId }, { onSuccess: () => reset() });
       return;
     }
 
-    mutate(formData);
+    createProduct(formData, { onSuccess: () => reset() });
   }
 
   function onError(errors) {}
@@ -98,7 +84,7 @@ function CreateProductForm({ productToEdit = {} }) {
               newColors[newIndex] = e.target.value;
               setColors(newColors);
             }}
-            disabled={isCreating}
+            disabled={isWorking}
           />
         </FormRow>
 
@@ -113,7 +99,7 @@ function CreateProductForm({ productToEdit = {} }) {
                 message: "Price should be at least 1",
               },
             })}
-            disabled={isCreating}
+            disabled={isWorking}
           />
         </FormRow>
 
@@ -123,7 +109,7 @@ function CreateProductForm({ productToEdit = {} }) {
             id={`quantity${newIndex}`}
             {...register(`quantity[${newIndex}]`)}
             defaultValue={10}
-            disabled={isCreating}
+            disabled={isWorking}
           />
         </FormRow>
 
@@ -159,7 +145,7 @@ function CreateProductForm({ productToEdit = {} }) {
           {...register("name", {
             required: "This field is required",
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -173,7 +159,7 @@ function CreateProductForm({ productToEdit = {} }) {
           {...register("storageCapacity", {
             required: "This field is required",
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -185,7 +171,7 @@ function CreateProductForm({ productToEdit = {} }) {
           {...register("category", {
             required: "This field is required",
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -200,7 +186,7 @@ function CreateProductForm({ productToEdit = {} }) {
           {...register("description", {
             required: "This field is required",
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -215,7 +201,7 @@ function CreateProductForm({ productToEdit = {} }) {
             },
           })}
           defaultValue={0}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -227,7 +213,7 @@ function CreateProductForm({ productToEdit = {} }) {
           {...register("imageCover", {
             required: isEditSession ? false : "This field is required",
           })}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -236,7 +222,7 @@ function CreateProductForm({ productToEdit = {} }) {
           id="images"
           accept="image/*"
           {...register("images")}
-          disabled={isCreating}
+          disabled={isWorking}
         />
       </FormRow>
 
@@ -255,7 +241,7 @@ function CreateProductForm({ productToEdit = {} }) {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button type="submit" disabled={isCreating}>
+        <Button type="submit" disabled={isWorking}>
           {isEditSession ? "Edit" : "Create"}
         </Button>
       </FormRow>

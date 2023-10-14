@@ -1,9 +1,8 @@
-import { toast } from "react-hot-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styled from "styled-components";
-import { deleteProduct } from "../../services/apiProducts";
 import { useState } from "react";
+
 import CreateProductForm from "./CreateProductForm";
+import { useDeleteProduct } from "./useDeleteProduct";
 
 const TableRow = styled.div`
   display: grid;
@@ -47,20 +46,9 @@ const Discount = styled.div`
 
 function ProductRow({ product }) {
   const [showForm, setShowForm] = useState(false);
+  const { isDeleting, deleteProduct } = useDeleteProduct();
 
   const { _id: productId, name, imageCover, category, discount } = product;
-  const queryClient = useQueryClient();
-
-  const { isLoading: isDeleting, mutate } = useMutation({
-    mutationFn: deleteProduct,
-    onSuccess: () => {
-      toast.success("Product successfully deleted");
-      queryClient.invalidateQueries({
-        queryKey: ["products"],
-      });
-    },
-    onError: (err) => toast.error(err.message),
-  });
 
   return (
     <>
@@ -72,10 +60,17 @@ function ProductRow({ product }) {
           alt={name}
         />
         <Price>{category}</Price>
-        <Discount>{`${discount}%`}</Discount>
+        {discount ? (
+          <Discount>{`${discount}%`}</Discount>
+        ) : (
+          <span>&mdash;</span>
+        )}
         <div>
           <button onClick={() => setShowForm((show) => !show)}>Edit</button>
-          <button onClick={() => mutate(productId)} disabled={isDeleting}>
+          <button
+            onClick={() => deleteProduct(productId)}
+            disabled={isDeleting}
+          >
             Delete
           </button>
         </div>
