@@ -6,26 +6,34 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createProduct } from "../../services/apiProducts";
+import { createProduct, editProduct } from "../../services/apiProducts";
 import { useState } from "react";
 import FormRow from "../../ui/FormRow";
 
-function CreateProductForm() {
+function CreateProductForm({ productToEdit = {} }) {
+  const { _id: editId, ...editValues } = productToEdit;
+  const isEditSession = Boolean(editId);
   const queryClient = useQueryClient();
 
   const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: createProduct,
+    mutationFn: isEditSession ? editProduct : createProduct,
     onSuccess: () => {
-      toast.success("New product successfully created");
+      toast.success(
+        isEditSession
+          ? "Product successfully updated"
+          : "New product successfully created"
+      );
       queryClient.invalidateQueries({ queryKey: "products" });
-      reset();
+      if (isEditSession) reset();
     },
     onError: (err) => {
       toast.error(err.message);
     },
   });
 
-  const { register, handleSubmit, reset, formState } = useForm();
+  const { register, handleSubmit, reset, formState } = useForm({
+    defaultValues: isEditSession ? editValues : {},
+  });
   const { errors } = formState;
   const [variantForms, setVariantForms] = useState([]);
   const [colors, setColors] = useState([]);
@@ -47,11 +55,10 @@ function CreateProductForm() {
     }));
 
     const formData = new FormData();
-
     formData.append("name", name);
     formData.append("category", category);
     formData.append("description", description);
-    formData.append("discount", discount);
+    formData.append("discount", Number(discount));
     formData.append("storageCapacity", storageCapacity);
 
     formData.append("imageCover", imageCover[0]);
@@ -61,6 +68,13 @@ function CreateProductForm() {
       formData.append(`colors[${index}][price]`, color.price);
       formData.append(`colors[${index}][quantity]`, color.quantity);
     });
+
+    if (isEditSession) {
+      // console.log({ ...data, editId });
+      mutate({ ...data, editId });
+      return;
+    }
+
     mutate(formData);
   }
 
@@ -71,11 +85,11 @@ function CreateProductForm() {
     const newIndex = variantForms.length;
     const newForm = (
       <div key={newIndex}>
-        <FormRow label={"Color"} error={errors?.color[newIndex]?.message}>
+        <FormRow label={"Color"} error={errors?.[`color-${newIndex}`]?.message}>
           <Input
             type="text"
             id={`color${newIndex}`}
-            {...register(`color[${newIndex}]`, {
+            {...register(`color-${newIndex}`, {
               required: "This field is required",
             })}
             onChange={(e) => {
@@ -88,11 +102,11 @@ function CreateProductForm() {
           />
         </FormRow>
 
-        <FormRow label={"Price"} error={errors?.price[newIndex]?.message}>
+        <FormRow label={"Price"} error={errors?.[`price-${newIndex}`]?.message}>
           <Input
             type="number"
             id={`price${newIndex}`}
-            {...register(`price[${newIndex}]`, {
+            {...register(`price-${newIndex}`, {
               required: "This field is required",
               min: {
                 value: 1,
@@ -211,7 +225,7 @@ function CreateProductForm() {
           id="imageCover"
           accept="image/*"
           {...register("imageCover", {
-            required: "This field is required",
+            required: isEditSession ? false : "This field is required",
           })}
           disabled={isCreating}
         />
@@ -242,7 +256,7 @@ function CreateProductForm() {
           Cancel
         </Button>
         <Button type="submit" disabled={isCreating}>
-          Add
+          {isEditSession ? "Edit" : "Create"}
         </Button>
       </FormRow>
     </Form>
