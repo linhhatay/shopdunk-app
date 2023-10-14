@@ -26,7 +26,7 @@ exports.uploadProductImages = upload.fields([
 ]);
 
 exports.resizeImages = catchAsync(async (req, res, next) => {
-  if (!req.files.imageCover) return next();
+  if (!req.files?.imageCover) return next();
 
   // 1) Cover image
   req.body.imageCover = `product-${Date.now()}-cover.jpeg`;
@@ -37,7 +37,7 @@ exports.resizeImages = catchAsync(async (req, res, next) => {
     .toFile(`public/img/products/${req.body.imageCover}`);
 
   // 2) Images
-  if (!req.files.images) return next();
+  if (!req.files?.images) return next();
   req.body.images = [];
 
   await Promise.all(

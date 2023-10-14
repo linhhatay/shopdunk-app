@@ -31,6 +31,7 @@ function ProductTable() {
   const { isLoading, products, error } = useProducts();
 
   if (isLoading) return <Spinner />;
+  if (error) return <div>Đã có lỗi xảy ra...</div>;
   return (
     <Table role="table">
       <TableHeader role="row">

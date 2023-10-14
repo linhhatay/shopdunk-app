@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { HiPencil, HiTrash, HiSquare2Stack } from "react-icons/hi2";
 
 import CreateProductForm from "./CreateProductForm";
 import { useDeleteProduct } from "./useDeleteProduct";
+import { useCreateProduct } from "./useCreateProduct";
+import { useDuplicateProduct } from "./useDuplicateProduct";
 
 const TableRow = styled.div`
   display: grid;
@@ -47,8 +50,31 @@ const Discount = styled.div`
 function ProductRow({ product }) {
   const [showForm, setShowForm] = useState(false);
   const { isDeleting, deleteProduct } = useDeleteProduct();
+  const { isDuplicating, duplicateProduct } = useDuplicateProduct();
+  const {
+    _id: productId,
+    name,
+    imageCover,
+    images,
+    description,
+    storageCapacity,
+    colors,
+    category,
+    discount,
+  } = product;
 
-  const { _id: productId, name, imageCover, category, discount } = product;
+  function handleDuplicate() {
+    duplicateProduct({
+      name: `Copy of ${name}`,
+      description,
+      storageCapacity,
+      colors,
+      imageCover,
+      images,
+      category,
+      discount,
+    });
+  }
 
   return (
     <>
@@ -66,12 +92,17 @@ function ProductRow({ product }) {
           <span>&mdash;</span>
         )}
         <div>
-          <button onClick={() => setShowForm((show) => !show)}>Edit</button>
+          <button onClick={handleDuplicate} disabled={isDuplicating}>
+            <HiSquare2Stack />
+          </button>
+          <button onClick={() => setShowForm((show) => !show)}>
+            <HiPencil />
+          </button>
           <button
             onClick={() => deleteProduct(productId)}
             disabled={isDeleting}
           >
-            Delete
+            <HiTrash />
           </button>
         </div>
       </TableRow>
