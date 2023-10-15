@@ -35,23 +35,39 @@ export async function createProduct(newProduct) {
 }
 
 export async function editProduct(data) {
-  const res = await fetch(
-    `http://localhost:8000/api/v1/products/${data.editId}`,
-    {
+  console.log(data);
+  console.log(data.imageCover);
+  let res;
+  if (typeof data.imageCover === "string") {
+    res = await fetch(`http://localhost:8000/api/v1/products/${data.editId}`, {
       method: "PATCH",
       mode: "cors",
       cache: "no-cache",
       credentials: "same-origin",
       headers: {
         "Content-Type": "application/json",
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify(data),
+    });
+  } else {
+    res = await fetch(`http://localhost:8000/api/v1/products/${data.editId}`, {
+      method: "PATCH",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        // "Content-Type": "application/json",
         // "Content-Type": "multipart/form-data",
         // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       redirect: "follow",
       referrerPolicy: "no-referrer",
-      body: JSON.stringify(data),
-    }
-  );
+      body: data.formData,
+    });
+  }
+
   return res.json();
 }
 

@@ -21,8 +21,8 @@ function CreateProductForm({ productToEdit = {} }) {
     defaultValues: isEditSession ? editValues : {},
   });
   const { errors } = formState;
-  const [variantForms, setVariantForms] = useState([]);
-  const [colors, setColors] = useState([]);
+  const [variantForms, setVariantForms] = useState(productToEdit.colors || []);
+  const [colors, setColors] = useState(productToEdit.colors || []);
 
   function onSubmit(data) {
     const {
@@ -32,13 +32,23 @@ function CreateProductForm({ productToEdit = {} }) {
       imageCover,
       discount,
       storageCapacity,
+      color,
     } = data;
+    let colorData;
 
-    const colorData = colors.map((color, index) => ({
-      name: color,
-      price: data.price[index],
-      quantity: data.quantity[index],
-    }));
+    if (!isEditSession) {
+      colorData = colors.map((color, index) => ({
+        name: color,
+        price: data.price[index],
+        quantity: data.quantity[index],
+      }));
+    } else {
+      colorData = color.map((color, index) => ({
+        name: color,
+        price: data.price[index],
+        quantity: data.quantity[index],
+      }));
+    }
 
     const formData = new FormData();
     formData.append("name", name);
@@ -56,8 +66,23 @@ function CreateProductForm({ productToEdit = {} }) {
     });
 
     if (isEditSession) {
-      // console.log({ ...data, editId });
-      editProduct({ ...data, editId }, { onSuccess: () => reset() });
+      if (typeof imageCover !== "string") {
+        editProduct({ formData, editId }, { onSuccess: () => reset() });
+      } else {
+        editProduct(
+          {
+            name,
+            category,
+            description,
+            imageCover,
+            discount,
+            storageCapacity,
+            colors: colorData,
+            editId,
+          },
+          { onSuccess: () => reset() }
+        );
+      }
       return;
     }
 
@@ -75,7 +100,7 @@ function CreateProductForm({ productToEdit = {} }) {
           <Input
             type="text"
             id={`color${newIndex}`}
-            {...register(`color-${newIndex}`, {
+            {...register(`color[${newIndex}]`, {
               required: "This field is required",
             })}
             onChange={(e) => {
@@ -92,7 +117,7 @@ function CreateProductForm({ productToEdit = {} }) {
           <Input
             type="number"
             id={`price${newIndex}`}
-            {...register(`price-${newIndex}`, {
+            {...register(`price[${newIndex}]`, {
               required: "This field is required",
               min: {
                 value: 1,
@@ -233,7 +258,65 @@ function CreateProductForm({ productToEdit = {} }) {
       </FormRow>
 
       {variantForms.map((form, index) => (
-        <div key={index}>{form}</div>
+        <div key={index}>
+          <div key={index}>
+            <FormRow
+              label={"Color"}
+              error={errors?.[`color-${index}`]?.message}
+            >
+              <Input
+                type="text"
+                id={`color${index}`}
+                {...register(`color[${index}]`, {
+                  required: "This field is required",
+                })}
+                onChange={(e) => {
+                  // Cập nhật tên màu vào mảng colors khi thay đổi giá trị trường màu
+                  const newColors = [...colors];
+                  newColors[index] = e.target.value;
+                  setColors(newColors);
+                }}
+                defaultValue={form.name}
+                disabled={isWorking}
+              />
+            </FormRow>
+
+            <FormRow
+              label={"Price"}
+              error={errors?.[`price-${index}`]?.message}
+            >
+              <Input
+                type="number"
+                id={`price${index}`}
+                {...register(`price[${index}]`, {
+                  required: "This field is required",
+                  min: {
+                    value: 1,
+                    message: "Price should be at least 1",
+                  },
+                })}
+                defaultValue={form.price}
+                disabled={isWorking}
+              />
+            </FormRow>
+
+            <FormRow label={"Quantity"}>
+              <Input
+                type="number"
+                id={`quantity${index}`}
+                {...register(`quantity[${index}]`)}
+                defaultValue={form.quantity}
+                disabled={isWorking}
+              />
+            </FormRow>
+
+            <FormRow>
+              <Button type="button" onClick={() => removeVariantForm(index)}>
+                Remove Variant
+              </Button>
+            </FormRow>
+          </div>
+        </div>
       ))}
 
       <FormRow>
