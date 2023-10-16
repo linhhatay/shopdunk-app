@@ -1,23 +1,26 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { HiPencil, HiTrash, HiSquare2Stack } from "react-icons/hi2";
 
 import CreateProductForm from "./CreateProductForm";
 import { useDeleteProduct } from "./useDeleteProduct";
 import { useCreateProduct } from "./useCreateProduct";
 import { useDuplicateProduct } from "./useDuplicateProduct";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import Modal from "../../ui/Modal";
+import Table from "../../ui/Table";
+import Menus from "../../ui/Menus";
 
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
+// const TableRow = styled.div`
+//   display: grid;
+//   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+//   column-gap: 2.4rem;
+//   align-items: center;
+//   padding: 1.4rem 2.4rem;
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
+//   &:not(:last-child) {
+//     border-bottom: 1px solid var(--color-grey-100);
+//   }
+// `;
 
 const Img = styled.img`
   display: block;
@@ -48,7 +51,6 @@ const Discount = styled.div`
 `;
 
 function ProductRow({ product }) {
-  const [showForm, setShowForm] = useState(false);
   const { isDeleting, deleteProduct } = useDeleteProduct();
   const { isDuplicating, duplicateProduct } = useDuplicateProduct();
   const {
@@ -77,37 +79,49 @@ function ProductRow({ product }) {
   }
 
   return (
-    <>
-      <TableRow role="row">
-        <div></div>
-        <Product>{name}</Product>
-        <Img
-          src={`http://localhost:8000/img/products/${imageCover}`}
-          alt={name}
-        />
-        <Price>{category}</Price>
-        {discount ? (
-          <Discount>{`${discount}%`}</Discount>
-        ) : (
-          <span>&mdash;</span>
-        )}
-        <div>
-          <button onClick={handleDuplicate} disabled={isDuplicating}>
-            <HiSquare2Stack />
-          </button>
-          <button onClick={() => setShowForm((show) => !show)}>
-            <HiPencil />
-          </button>
-          <button
-            onClick={() => deleteProduct(productId)}
-            disabled={isDeleting}
-          >
-            <HiTrash />
-          </button>
-        </div>
-      </TableRow>
-      {showForm && <CreateProductForm productToEdit={product} />}
-    </>
+    <Table.Row>
+      <div></div>
+      <Product>{name}</Product>
+      <Img
+        src={`http://localhost:8000/img/products/${imageCover}`}
+        alt={name}
+      />
+      <Price>{category}</Price>
+      {discount ? <Discount>{`${discount}%`}</Discount> : <span>&mdash;</span>}
+      <div>
+        <Modal>
+          <Menus.Menu>
+            <Menus.Toggle id={productId} />
+
+            <Menus.List id={productId}>
+              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
+                Duplicate
+              </Menus.Button>
+
+              <Modal.Open opens="edit">
+                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              </Modal.Open>
+
+              <Modal.Open opens="delete">
+                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+              </Modal.Open>
+            </Menus.List>
+
+            <Modal.Window name="edit">
+              <CreateProductForm productToEdit={product} />
+            </Modal.Window>
+
+            <Modal.Window name="delete">
+              <ConfirmDelete
+                resourceName={"products"}
+                disabled={isDeleting}
+                onConfirm={() => deleteProduct(productId)}
+              />
+            </Modal.Window>
+          </Menus.Menu>
+        </Modal>
+      </div>
+    </Table.Row>
   );
 }
 

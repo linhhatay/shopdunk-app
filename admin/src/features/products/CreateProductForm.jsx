@@ -10,7 +10,7 @@ import FormRow from "../../ui/FormRow";
 import { useCreateProduct } from "./useCreateProduct";
 import { useEditProduct } from "./useEditProduct";
 
-function CreateProductForm({ productToEdit = {} }) {
+function CreateProductForm({ productToEdit = {}, onCloseModal }) {
   const { _id: editId, ...editValues } = productToEdit;
   const isEditSession = Boolean(editId);
   const { isCreating, createProduct } = useCreateProduct();
@@ -67,7 +67,15 @@ function CreateProductForm({ productToEdit = {} }) {
 
     if (isEditSession) {
       if (typeof imageCover !== "string") {
-        editProduct({ formData, editId }, { onSuccess: () => reset() });
+        editProduct(
+          { formData, editId },
+          {
+            onSuccess: () => {
+              reset();
+              onCloseModal?.();
+            },
+          }
+        );
       } else {
         editProduct(
           {
@@ -80,13 +88,23 @@ function CreateProductForm({ productToEdit = {} }) {
             colors: colorData,
             editId,
           },
-          { onSuccess: () => reset() }
+          {
+            onSuccess: () => {
+              reset();
+              onCloseModal?.();
+            },
+          }
         );
       }
       return;
     }
 
-    createProduct(formData, { onSuccess: () => reset() });
+    createProduct(formData, {
+      onSuccess: () => {
+        reset();
+        onCloseModal?.();
+      },
+    });
   }
 
   function onError(errors) {}
@@ -162,7 +180,10 @@ function CreateProductForm({ productToEdit = {} }) {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label={"Name"} error={errors?.name?.message}>
         <Input
           type="text"
@@ -321,7 +342,11 @@ function CreateProductForm({ productToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button type="submit" disabled={isWorking}>
