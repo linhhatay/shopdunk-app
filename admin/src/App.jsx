@@ -15,6 +15,7 @@ import Users from "./pages/Users";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
+import Orders from "./pages/Orders";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,6 +35,7 @@ function App() {
           <Route element={<AppLayout />}>
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="orders" element={<Orders />} />
             <Route path="products" element={<Products />} />
             <Route path="users" element={<Users />} />
           </Route>
