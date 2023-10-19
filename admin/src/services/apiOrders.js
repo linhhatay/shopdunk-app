@@ -74,3 +74,12 @@ export async function editOrder(data) {
 
   return res.json();
 }
+
+export async function getOrder(id) {
+  let url = `http://localhost:8000/api/v1/orders/${id}`;
+
+  const res = await fetch(url);
+  const data = res.json();
+
+  return data;
+}

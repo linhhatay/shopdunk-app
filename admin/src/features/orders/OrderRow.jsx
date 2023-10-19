@@ -3,6 +3,9 @@ import styled from "styled-components";
 import Tag from "../../ui/Tag";
 import Table from "../../ui/Table";
 import { formatCurrency } from "../../utils/helpers";
+import { HiEye } from "react-icons/hi2";
+import Menus from "../../ui/Menus";
+import { useNavigate } from "react-router-dom";
 
 const Product = styled.div`
   font-size: 1.6rem;
@@ -49,6 +52,8 @@ function OrderRow({
     Delivered: "silver",
   };
 
+  const navigate = useNavigate();
+
   return (
     <Table.Row role="row">
       <Stacked>
@@ -63,6 +68,18 @@ function OrderRow({
       <Tag type={statusToTagName[status]}>{status}</Tag>
 
       <Amount>{formatCurrency(totalAmount)}</Amount>
+
+      <Menus.Menu>
+        <Menus.Toggle id={orderId} />
+        <Menus.List id={orderId}>
+          <Menus.Button
+            icon={<HiEye />}
+            onClick={() => navigate(`/orders/${orderId}`)}
+          >
+            See details
+          </Menus.Button>
+        </Menus.List>
+      </Menus.Menu>
     </Table.Row>
   );
 }
