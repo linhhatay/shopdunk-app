@@ -1,4 +1,4 @@
-export async function getOrders({ filter, sortBy }) {
+export async function getOrders({ filter, sortBy, pagination }) {
   let url = "http://localhost:8000/api/v1/orders";
 
   if (filter) {
@@ -15,6 +15,10 @@ export async function getOrders({ filter, sortBy }) {
         sortBy.field
       }`;
     }
+  }
+
+  if (pagination) {
+    url = `${url}&page=${pagination.page}&limit=${pagination.limit}`;
   }
   const res = await fetch(url);
   const data = res.json();

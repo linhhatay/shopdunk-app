@@ -76,10 +76,12 @@ exports.getAll = (Model) =>
       .limitFields()
       .paginate();
     const doc = await features.query;
+    const count = await Model.countDocuments();
 
     res.status(200).json({
       status: "success",
       results: doc.length,
+      count,
       data: {
         data: doc,
       },

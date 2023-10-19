@@ -30,6 +30,10 @@ function OrderTable() {
           render={(order) => <OrderRow key={order._id} order={order} />}
         />
       </Table>
+
+      <Table.Footer>
+        <Pagination count={orders.count} />
+      </Table.Footer>
     </Menus>
   );
 }
