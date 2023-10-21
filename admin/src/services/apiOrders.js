@@ -21,7 +21,7 @@ export async function getOrders({ filter, sortBy, pagination }) {
     url = `${url}&page=${pagination.page}&limit=${pagination.limit}`;
   }
   const res = await fetch(url);
-  const data = res.json();
+  const data = await res.json();
 
   return data;
 }
@@ -36,7 +36,9 @@ export async function deleteOrder(id) {
       "Content-Type": "application/json",
     },
   });
-  return res;
+  const data = await res.json();
+
+  return data;
 }
 
 export async function createOrder(newProduct) {
@@ -52,7 +54,9 @@ export async function createOrder(newProduct) {
     referrerPolicy: "no-referrer",
     body: newProduct,
   });
-  return res.json();
+  const data = await res.json();
+
+  return data;
 }
 
 export async function editOrder(data) {
@@ -72,14 +76,16 @@ export async function editOrder(data) {
     }
   );
 
-  return res.json();
+  const output = await res.json();
+
+  return output;
 }
 
 export async function getOrder(id) {
   let url = `http://localhost:8000/api/v1/orders/${id}`;
 
   const res = await fetch(url);
-  const data = res.json();
+  const data = await res.json();
 
   return data;
 }

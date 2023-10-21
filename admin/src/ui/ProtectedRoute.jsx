@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Spinner from "./Spinner";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useUser } from "../features/authentication/useUser";
 
 const FullPage = styled.div`
   height: 100vh;
@@ -14,16 +15,24 @@ const FullPage = styled.div`
 function ProtectedRoute({ children }) {
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("user")) || [];
-  const { token } = userData;
+  const isAdmin = userData?.data?.user.role === "admin";
+  const { isLoading, user } = useUser();
 
   useEffect(
     function () {
-      if (!token) navigate("/login");
+      if (!isAdmin) navigate("/login");
     },
-    [token, navigate]
+    [isAdmin, navigate]
   );
 
-  if (token) return children;
+  if (isLoading)
+    return (
+      <FullPage>
+        <Spinner />
+      </FullPage>
+    );
+
+  if (user) return children;
 }
 
 export default ProtectedRoute;

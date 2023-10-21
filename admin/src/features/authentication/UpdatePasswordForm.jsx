@@ -9,15 +9,35 @@ import { useUpdateUser } from "./useUpdateUser";
 function UpdatePasswordForm() {
   const { register, handleSubmit, formState, getValues, reset } = useForm();
   const { errors } = formState;
-
+  const userData = JSON.parse(localStorage.getItem("user")) || [];
+  const accessToken = userData.token;
   const { updateUser, isUpdating } = useUpdateUser();
 
-  function onSubmit({ password }) {
-    updateUser({ password }, { onSuccess: reset });
+  function onSubmit({ password, passwordCurrent }) {
+    updateUser(
+      { accessToken, passwordCurrent, password },
+      { onSuccess: reset }
+    );
   }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
+      <FormRow label="Current password" error={errors?.password?.message}>
+        <Input
+          type="password"
+          id="passwordCurrent"
+          autoComplete="current-password"
+          disabled={isUpdating}
+          {...register("passwordCurrent", {
+            required: "This field is required",
+            minLength: {
+              value: 8,
+              message: "Password needs a minimum of 8 characters",
+            },
+          })}
+        />
+      </FormRow>
+
       <FormRow
         label="Password (min 8 characters)"
         error={errors?.password?.message}

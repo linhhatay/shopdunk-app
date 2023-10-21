@@ -7,7 +7,7 @@ import { useLogin } from "./useLogin";
 import SpinnerMini from "../../ui/SpinnerMini";
 
 function LoginForm() {
-  const [email, setEmail] = useState("ln14092@gmail.com");
+  const [email, setEmail] = useState("admin");
   const [password, setPassword] = useState("12345678");
   const { login, isLoading } = useLogin();
 
@@ -29,7 +29,6 @@ function LoginForm() {
     <Form onSubmit={handleSubmit}>
       <FormRow label="Email address">
         <Input
-          type="email"
           id="email"
           // This makes this form better for password managers
           autoComplete="username"

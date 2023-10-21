@@ -17,6 +17,7 @@ import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 import Orders from "./pages/Orders";
 import Order from "./pages/Order";
+import Account from "./pages/Account";
 import ProtectedRoute from "./ui/ProtectedRoute";
 
 const queryClient = new QueryClient({
@@ -47,6 +48,7 @@ function App() {
             <Route path="orders/:id" element={<Order />} />
             <Route path="products" element={<Products />} />
             <Route path="users" element={<Users />} />
+            <Route path="account" element={<Account />} />
           </Route>
           <Route path="login" element={<Login />} />
           <Route path="*" element={<PageNotFound />} />

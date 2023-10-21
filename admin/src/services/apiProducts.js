@@ -1,6 +1,6 @@
 export async function getProducts() {
   const res = await fetch("http://localhost:8000/api/v1/products");
-  const data = res.json();
+  const data = await res.json();
 
   return data;
 }
@@ -15,7 +15,9 @@ export async function deleteProduct(id) {
       "Content-Type": "application/json",
     },
   });
-  return res;
+  const data = await res.json();
+
+  return data;
 }
 
 export async function createProduct(newProduct) {
@@ -31,12 +33,12 @@ export async function createProduct(newProduct) {
     referrerPolicy: "no-referrer",
     body: newProduct,
   });
-  return res.json();
+  const data = await res.json();
+
+  return data;
 }
 
 export async function editProduct(data) {
-  console.log(data);
-  console.log(data.imageCover);
   let res;
   if (typeof data.imageCover === "string") {
     res = await fetch(`http://localhost:8000/api/v1/products/${data.editId}`, {
@@ -68,7 +70,9 @@ export async function editProduct(data) {
     });
   }
 
-  return res.json();
+  const output = await res.json();
+
+  return output;
 }
 
 export async function duplicateProduct(data) {
@@ -84,5 +88,7 @@ export async function duplicateProduct(data) {
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data),
   });
-  return res.json();
+  const output = await res.json();
+
+  return output;
 }
