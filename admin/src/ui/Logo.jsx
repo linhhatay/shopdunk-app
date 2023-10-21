@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const StyledLogo = styled.div`
   text-align: center;
@@ -10,12 +11,11 @@ const Img = styled.img`
 `;
 
 function Logo() {
+  const { isDarkMode } = useDarkMode();
+  const src = !isDarkMode ? "logo-dark.png" : "/logo-light.png";
   return (
     <StyledLogo>
-      <Img
-        src="https://minhtuanmobile.com/uploads/blog/bi-mat-dang-sau-cac-thiet-ke-logo-cua-apple-230221120004.jpg"
-        alt="Logo"
-      />
+      <Img src={src} alt="Logo" />
     </StyledLogo>
   );
 }
