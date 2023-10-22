@@ -1,0 +1,41 @@
+@import 'normalize.css';
+
+:root {
+    --font-family: 'Arial', sans-serif;
+
+    --black: #000;
+    --primary-color: #446084;
+    --secondary-color: #d26e4b;
+    --text-color: #777;
+    --white: #fff;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    // font-size: 62.5%;
+}
+
+body {
+    color: var(--text-color);
+    font: normal 14px 'Arial';
+    text-rendering: optimizespeed;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img,
+label {
+    vertical-align: middle;
+}
+
+strong {
+    font-weight: bolder;
+}

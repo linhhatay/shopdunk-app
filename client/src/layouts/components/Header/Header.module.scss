@@ -1,0 +1,126 @@
+.wrapper {
+    width: 100%;
+    background-color: #515154;
+    position: sticky;
+    top: 0px;
+    z-index: 11;
+    margin: auto;
+}
+
+.inner {
+    position: relative;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    padding: 0;
+}
+
+.logo {
+    margin: auto 0;
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 0;
+
+    a {
+        display: inline-block;
+        max-width: 100%;
+        line-height: 0;
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 500;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+
+            img {
+                max-width: 173px;
+                max-height: 64px;
+                opacity: 1;
+                object-fit: cover;
+                border: none;
+            }
+        }
+    }
+}
+
+.actions {
+    display: flex;
+    justify-content: space-evenly;
+    width: 20%;
+}
+
+.search-icon {
+    background: url('https://shopdunk.com/images/uploaded-source/icon/search-icon-1.png') left center no-repeat;
+    background-position: 60%;
+    padding: 15px 15px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 40px;
+}
+
+.cart-icon {
+    min-height: 64px;
+    padding-top: 16px;
+    width: 40px;
+    text-align: center;
+
+    a {
+        background: url('https://shopdunk.com/images/uploaded-source/icon/cart-icon.png') left center no-repeat;
+        width: 25px;
+        height: 25px;
+        position: relative;
+        padding-left: 20px;
+        display: inline-block;
+        font-size: 12px;
+        line-height: 45px;
+
+        span {
+            background-color: #fff;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            position: absolute;
+            top: 12px;
+            right: 0;
+            line-height: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-size: 12px;
+            text-align: center;
+        }
+    }
+}
+
+.auth-icon {
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 64px;
+    padding-top: 22px;
+    width: 40px;
+    text-align: center;
+
+    a img {
+        opacity: 0.99;
+        border: none;
+    }
+}
+
+.languages {
+    display: flex;
+    align-items: center;
+
+    &-list {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-right: 10px;
+    }
+}
