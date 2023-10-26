@@ -1,10 +1,49 @@
 import classNames from 'classnames/bind';
 import styles from './Product.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import * as httpRequest from '~/utils/httpRequest';
+import { addItem } from '~/store/actions/cartAction';
+import { useDispatch } from 'react-redux';
+import config from '~/configs';
 
 const cx = classNames.bind(styles);
 
 function Product() {
+    const { id: productId } = useParams();
+    const [product, setProduct] = useState({});
+    const [selectedColor, setSelectedColor] = useState(0);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const nameToColor = {
+        Đen: '#191d20',
+        Hồng: '#efcfd2',
+        Vàng: '#e9dfa7',
+    };
+
+    const handleColorClick = (color) => {
+        setSelectedColor(color);
+    };
+
+    useEffect(() => {
+        async function fetchProduct() {
+            const res = await httpRequest.get(`/products/${productId}`);
+            setProduct(res.data.data);
+        }
+        fetchProduct();
+    }, [productId]);
+
+    function handleAddToCart(e) {
+        e.preventDefault();
+        const newItem = {
+            ...product,
+            quantity: 1,
+            color: product.colors[selectedColor],
+        };
+        dispatch(addItem(newItem));
+        navigate(config.routes.cart);
+    }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('breadcrumb')}>
@@ -17,12 +56,12 @@ function Product() {
                     </li>
                     <li>
                         <a href="/">
-                            <span>iPhone</span>
+                            <span>{product.category}</span>
                         </a>
                         <span className={cx('breadcrumb-delimiter')}>›</span>
                     </li>
                     <li>
-                        <strong>iPhone 15 128GB</strong>
+                        <strong>{product.name}</strong>
                     </li>
                 </ul>
             </div>
@@ -37,8 +76,8 @@ function Product() {
                                             <div className={cx('picture')}>
                                                 <a href="/">
                                                     <img
-                                                        alt="iphone 15  128GB ShopDunk"
-                                                        src="https://shopdunk.com/images/thumbs/0019766_yellow_550.jpeg"
+                                                        alt={product.name}
+                                                        src={`http://localhost:8000/img/products/${product.imageCover}`}
                                                     />
                                                 </a>
                                             </div>
@@ -50,7 +89,7 @@ function Product() {
                                     <div className={cx('overview')}>
                                         <div className={cx('info')}>
                                             <div className={cx('name')}>
-                                                <h1>iPhone 15 128GB</h1>
+                                                <h1>{product.name}</h1>
                                             </div>
                                             <div className={cx('review')}>
                                                 <div>
@@ -96,16 +135,29 @@ function Product() {
                                                 </dt>
                                                 <dd>
                                                     <ul className={cx('color-square')}>
-                                                        <li className={cx('selected-color')}>
-                                                            <label>
-                                                                <span
-                                                                    style={{ height: '35.6px' }}
-                                                                    className={cx('attribute-square-container')}
-                                                                >
-                                                                    <span>{` `}</span>
-                                                                </span>
-                                                            </label>
-                                                        </li>
+                                                        {product.colors?.map((color, index) => (
+                                                            <li
+                                                                className={cx(
+                                                                    selectedColor === index ? 'selected-color' : '',
+                                                                )}
+                                                                key={color.name}
+                                                                onClick={() => handleColorClick(index)}
+                                                            >
+                                                                <label>
+                                                                    <span
+                                                                        style={{ height: '35.6px' }}
+                                                                        className={cx('attribute-square-container')}
+                                                                    >
+                                                                        <span
+                                                                            style={{
+                                                                                backgroundColor:
+                                                                                    nameToColor[color.name],
+                                                                            }}
+                                                                        >{` `}</span>
+                                                                    </span>
+                                                                </label>
+                                                            </li>
+                                                        ))}
                                                     </ul>
                                                 </dd>
                                             </dl>
@@ -158,7 +210,7 @@ function Product() {
                                             <div>
                                                 <div className={cx('add-to-cart')}>
                                                     <div>
-                                                        <button>Mua ngay</button>
+                                                        <button onClick={handleAddToCart}>Mua ngay</button>
                                                     </div>
                                                 </div>
                                             </div>

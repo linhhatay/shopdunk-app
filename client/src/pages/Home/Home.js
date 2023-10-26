@@ -3,10 +3,24 @@ import styles from './Home.module.scss';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
+import * as httpRequest from '~/utils/httpRequest';
+import { calculateDiscountedPrice, formatCurrency } from '~/utils/helpers';
 
 const cx = classNames.bind(styles);
 
 function Home() {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        async function fetchProducts() {
+            const res = await httpRequest.get('/products');
+            setProducts(res.data.data);
+        }
+
+        fetchProducts();
+    }, []);
+
     return (
         <div className={cx('wrapper')}>
             <div>
@@ -70,39 +84,49 @@ function Home() {
                                 <div className={cx('products')}>
                                     <div className={cx('featured-product-grid')}>
                                         <div className={cx('item-grid')}>
-                                            <div className={cx('item-box')}>
-                                                <div className={cx('product-item')}>
-                                                    <div className={cx('product-tag')}>
-                                                        <img
-                                                            src="https://shopdunk.com/images/uploaded/icon/new.png"
-                                                            alt=""
-                                                        />
-                                                    </div>
-                                                    <div className={cx('picture')}>
-                                                        <Link to="/">
-                                                            <img
-                                                                alt="iPhone 15 128GB"
-                                                                src="https://shopdunk.com/images/thumbs/0020320_iphone-15-128gb_240.webp"
-                                                                title="iPhone 15 128GB"
-                                                            />
-                                                        </Link>
-                                                    </div>
-                                                    <div className={cx('details')}>
-                                                        <h3>
-                                                            <Link to="/">iPhone 15 128GB</Link>
-                                                        </h3>
-                                                        <div className={cx('add-info')}>
-                                                            <div className={cx('prices')}>
-                                                                <div className={cx('price-ratio-container')}>
-                                                                    <span>-14%</span>
+                                            {products.length > 0 &&
+                                                products.map((product) => (
+                                                    <div className={cx('item-box')} key={product._id}>
+                                                        <div className={cx('product-item')}>
+                                                            <div className={cx('product-tag')}>
+                                                                <img
+                                                                    src="https://shopdunk.com/images/uploaded/icon/new.png"
+                                                                    alt=""
+                                                                />
+                                                            </div>
+                                                            <div className={cx('picture')}>
+                                                                <Link to={`/${product._id}`}>
+                                                                    <img
+                                                                        alt={product.name}
+                                                                        src={`http://localhost:8000/img/products/${product.imageCover}`}
+                                                                        title={product.name}
+                                                                    />
+                                                                </Link>
+                                                            </div>
+                                                            <div className={cx('details')}>
+                                                                <h3>
+                                                                    <Link to={`/${product._id}`}>{product.name}</Link>
+                                                                </h3>
+                                                                <div className={cx('add-info')}>
+                                                                    <div className={cx('prices')}>
+                                                                        <div className={cx('price-ratio-container')}>
+                                                                            <span>{`-${product.discount}%`}</span>
+                                                                        </div>
+                                                                        <span className={cx('old-price')}>
+                                                                            {formatCurrency(product.colors.at(0).price)}
+                                                                        </span>
+                                                                        <span className={cx('actual-price')}>
+                                                                            {calculateDiscountedPrice(
+                                                                                product.colors.at(0).price,
+                                                                                product.discount,
+                                                                            )}
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
-                                                                <span className={cx('old-price')}>24,990,000₫</span>
-                                                                <span className={cx('actual-price')}>21,490,000₫</span>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
+                                                ))}
                                         </div>
                                     </div>
                                 </div>

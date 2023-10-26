@@ -1,6 +1,6 @@
 const routes = {
     home: '/',
-    product: '/product',
+    product: '/:id',
     cart: '/cart',
     pageNotFound: '/page-not-found',
 };
