@@ -63,6 +63,23 @@ exports.aliasTopProducts = (req, res, next) => {
   next();
 };
 
+exports.searchProduct = catchAsync(async (req, res) => {
+  const products = await Product.find({ name: { $regex: req.query.name } })
+    .limit(10)
+    .select("name imageCover");
+
+  if (!products) {
+    return next(new AppError("No document found with that name", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      data: products,
+    },
+  });
+});
+
 exports.createProduct = factory.createOne(Product);
 exports.getAllProducts = factory.getAll(Product);
 exports.getProduct = factory.getOne(Product);

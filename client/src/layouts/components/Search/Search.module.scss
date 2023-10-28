@@ -1,0 +1,100 @@
+.wrapper {
+    background: #000;
+    width: 100%;
+    position: fixed;
+    margin: unset;
+    height: 66px;
+    z-index: 99999;
+    top: 0;
+    text-align: center;
+    vertical-align: middle;
+
+    form {
+        display: inline-block;
+        margin-top: 12px;
+        animation: fadeIn 0.5s;
+        width: 50%;
+
+        &::after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        input {
+            width: 100%;
+            background: #fff;
+            border: unset;
+            color: #1d1d1f;
+            height: 40px;
+            margin-right: -1px;
+            padding: 8px;
+            vertical-align: middle;
+            font-size: 15px;
+            padding-left: 16px;
+            float: left;
+            outline: none;
+        }
+    }
+}
+
+.inner {
+    position: relative;
+}
+
+.results {
+    width: 50%;
+    border: 1px solid #c5c5c5;
+    border-radius: 0 0 8px 8px !important;
+    overflow: hidden;
+    background-color: #fff;
+    text-align: left;
+    border-radius: 0;
+    padding: 0;
+    font: normal 14px Arial, Helvetica, sans-serif;
+    background: #fff;
+    color: #333;
+    list-style: none;
+    outline: none;
+    position: absolute;
+    z-index: 100;
+    top: 52px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.item {
+    cursor: pointer;
+    border-top: 1px solid #ddd;
+    list-style-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+
+    &:first-child {
+        border-top: none;
+    }
+
+    a {
+        display: block;
+        font-size: 14px;
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        background: none;
+        padding: 15px;
+        line-height: normal;
+        color: #777;
+
+        &:hover {
+            background-color: #f6f6f6;
+        }
+
+        img {
+            min-width: 20px;
+            margin: 0 10px 0 0;
+            vertical-align: middle;
+            display: inline;
+            width: 20px;
+            height: 20px;
+            object-fit: cover;
+        }
+    }
+}

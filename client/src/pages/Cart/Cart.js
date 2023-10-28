@@ -2,15 +2,41 @@ import classNames from 'classnames/bind';
 import styles from './Cart.module.scss';
 import Breadcrumb from '~/components/Breadcrumb';
 import { useSelector } from 'react-redux';
-import { getCart } from '~/store/actions/cartAction';
+import { getCart, getTotalCartPrice } from '~/store/actions/cartAction';
 import CartItem from './CartItem';
+import Sell from './Sell';
+import Checkout from './Checkout';
+import { useState } from 'react';
+import * as httpRequest from '~/utils/httpRequest';
 
 const cx = classNames.bind(styles);
 
 function Cart() {
     const cart = useSelector(getCart);
+    const totalCartPrice = useSelector(getTotalCartPrice);
 
     if (!cart.length) return <div className={cx('no-data')}>Giỏ hàng của bạn đang trống!</div>;
+
+    const handlePayment = async (e) => {
+        e.preventDefault();
+        try {
+            // Tạo một đối tượng yêu cầu thanh toán
+            const paymentData = {
+                amount: Math.round(totalCartPrice),
+                bankCode: 'NCB',
+            };
+
+            // Gửi yêu cầu POST đến API tạo thanh toán
+            const response = await httpRequest.post('/orders/create_payment_url', paymentData);
+            console.log(response);
+            // Xử lý phản hồi từ API, ví dụ: chuyển hướng đến URL thanh toán
+            if (response && response.paymentUrl) {
+                window.location.href = response.paymentUrl;
+            }
+        } catch (error) {
+            console.error('Lỗi khi gửi yêu cầu thanh toán:', error);
+        }
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -58,6 +84,8 @@ function Cart() {
                                             </div>
                                         </div>
                                     </div>
+                                    <Sell />
+                                    <Checkout />
                                 </div>
                                 <div className={cx('checkout')}>
                                     <div className={cx('checkout-inner')}>
@@ -81,7 +109,7 @@ function Cart() {
                                                                     <label>Tổng phụ:</label>
                                                                 </td>
                                                                 <td>
-                                                                    <span>27.990.000₫</span>
+                                                                    <span>{totalCartPrice}₫</span>
                                                                 </td>
                                                             </tr>
                                                             <tr className={cx('order-total')}>
@@ -89,7 +117,7 @@ function Cart() {
                                                                     <label>Tổng cộng:</label>
                                                                 </td>
                                                                 <td>
-                                                                    <span>27.990.000₫</span>
+                                                                    <span>{totalCartPrice}₫</span>
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -110,7 +138,7 @@ function Cart() {
                                                     </div>
                                                 </div>
                                                 <div className={cx('checkout-btn')}>
-                                                    <button> Tiến hành đặt hàng </button>
+                                                    <button onClick={handlePayment}> Tiến hành đặt hàng </button>
                                                 </div>
                                                 <div className={cx('note-ck')}>
                                                     (*) Phí phụ thu sẽ được tính khi bạn tiến hành thanh toán.

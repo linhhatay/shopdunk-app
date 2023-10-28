@@ -21,7 +21,8 @@ function CartItem({ item }) {
             </td>
             <td className={cx('product-picture')}>
                 <a href="/iphone-15-pro">
-                    <img alt={item.name} src={`http://localhost:8000/img/products/${item.imageCover}`} />
+                    {/* <img alt={item.name} src={`http://localhost:8000/img/products/${item.imageCover}`} /> */}
+                    <img src="https://shopdunk.com/images/thumbs/0022263_iphone-15-pro-128gb_80.png" alt="product" />
                 </a>
             </td>
             <td className={cx('product')}>

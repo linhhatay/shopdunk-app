@@ -16,6 +16,8 @@ router
     productController.createProduct
   );
 
+router.get("/search", productController.searchProduct);
+
 router
   .route("/:id")
   .get(productController.getProduct)

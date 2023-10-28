@@ -3,10 +3,15 @@ import styles from './Header.module.scss';
 
 import { Link } from 'react-router-dom';
 import Navigation from '../Navigation';
+import { useSelector } from 'react-redux';
+import { getTotalCartQuantity } from '~/store/actions/cartAction';
+import config from '~/configs';
 
 const cx = classNames.bind(styles);
 
-function Header() {
+function Header({ onSearchForm }) {
+    const totalCartQuantity = useSelector(getTotalCartQuantity);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -20,10 +25,10 @@ function Header() {
                 {/* <Search /> */}
                 <Navigation />
                 <div className={cx('actions')}>
-                    <div className={cx('search-icon')}></div>
+                    <div className={cx('search-icon')} onClick={() => onSearchForm((c) => !c)}></div>
                     <div className={cx('cart-icon')}>
-                        <Link to="/">
-                            <span>0</span>
+                        <Link to={config.routes.cart}>
+                            <span>{totalCartQuantity}</span>
                         </Link>
                     </div>
                     <div className={cx('auth-icon')}>
