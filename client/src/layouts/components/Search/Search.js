@@ -57,7 +57,7 @@ function Search() {
             {showResult && searchResult.length > 0 && (
                 <ul className={cx('results')}>
                     {searchResult.map((result) => (
-                        <li className={cx('item')}>
+                        <li className={cx('item')} key={result._id}>
                             <Link to={`/${result._id}`}>
                                 <img
                                     src={`http://localhost:8000/img/products/${result.imageCover}`}

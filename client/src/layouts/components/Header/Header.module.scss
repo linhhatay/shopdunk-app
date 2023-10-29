@@ -107,9 +107,67 @@
     width: 40px;
     text-align: center;
 
+    &::before {
+        content: '';
+        position: absolute;
+        background-color: transparent;
+        height: 30px;
+        width: 30px;
+        bottom: -6px;
+        right: 60px;
+        z-index: 1;
+    }
+
+    &:hover {
+        ~ .account-desktop {
+            display: block;
+        }
+    }
+
     a img {
         opacity: 0.99;
         border: none;
+    }
+}
+
+.account-desktop {
+    display: none;
+    min-width: 248px;
+    position: absolute;
+    top: 55px;
+    right: 0px;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 8px 0;
+    text-align: left;
+    box-shadow: -2px 3px 20px 0px #000000a1;
+
+    &:hover {
+        display: block;
+    }
+
+    ul {
+        font-size: 0;
+        list-style: none;
+
+        li {
+            display: block;
+            text-align: left;
+            border-bottom: 1px solid #d2d2d7;
+            margin: 0 32px;
+
+            a {
+                font-size: 14px;
+                color: #1d1d1f;
+                line-height: 45px;
+                text-transform: none;
+                display: inline-block;
+
+                &:hover {
+                    color: #0066cc !important;
+                }
+            }
+        }
     }
 }
 
