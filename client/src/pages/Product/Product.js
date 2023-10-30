@@ -6,8 +6,15 @@ import * as httpRequest from '~/utils/httpRequest';
 import { addItem } from '~/store/actions/cartAction';
 import { useDispatch } from 'react-redux';
 import config from '~/configs';
+import PageNotFound from '../PageNotFound';
 
 const cx = classNames.bind(styles);
+
+const nameToColor = {
+    Đen: '#191d20',
+    Hồng: '#efcfd2',
+    Vàng: '#e9dfa7',
+};
 
 function Product() {
     const { id: productId } = useParams();
@@ -15,11 +22,6 @@ function Product() {
     const [selectedColor, setSelectedColor] = useState(0);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const nameToColor = {
-        Đen: '#191d20',
-        Hồng: '#efcfd2',
-        Vàng: '#e9dfa7',
-    };
 
     const handleColorClick = (color) => {
         setSelectedColor(color);

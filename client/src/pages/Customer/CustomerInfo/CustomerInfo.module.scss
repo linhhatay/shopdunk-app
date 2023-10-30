@@ -1,0 +1,176 @@
+.wrapper {
+    max-width: 1200px;
+    padding-top: 30px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+}
+
+.inner {
+    display: flex;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.sidebar {
+    background-color: unset;
+    padding: unset;
+    border-radius: unset;
+    margin-top: unset;
+    position: sticky;
+    top: 55px;
+    float: left;
+    width: 30%;
+    margin-bottom: 50px;
+
+    &-menu {
+        margin-bottom: 20px;
+        float: none;
+        width: auto;
+        max-width: 600px;
+        min-height: 50px;
+        text-align: left;
+    }
+}
+
+.listbox {
+    padding: 12px 12px;
+    background: #ffffff;
+    border-radius: 8px;
+    display: block;
+    border-bottom: none;
+
+    ul {
+        list-style: none;
+
+        li {
+            padding: 8px 0 8px 15px;
+
+            a {
+                display: inline-block;
+                position: relative;
+                padding: 5px 0;
+                font-size: 16px;
+                color: #444;
+                line-height: 21px;
+                transition: all 0.1s ease;
+            }
+        }
+    }
+}
+
+.customer-info {
+    a {
+        &::before {
+            content: '\f007';
+            background-color: unset;
+            padding-right: 10px;
+            font-size: 20px;
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+        }
+    }
+}
+
+.content {
+    width: 65%;
+    float: right;
+    margin-bottom: 10px;
+
+    &-inner {
+        border-radius: 8px;
+        text-align: left;
+    }
+}
+
+.form {
+    background-color: #fff;
+    border-radius: 8px;
+    padding-bottom: 0;
+}
+
+.fieldset {
+    margin-bottom: 24px;
+}
+
+.note {
+    display: inline-block;
+    margin: 16px 16px 0 16px;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+    color: #4b4b4b;
+    text-align: left;
+    padding: 10px;
+    border-radius: 8px;
+    background: #f5f5f7;
+}
+
+.form-fields {
+    width: auto;
+    margin: auto;
+    padding: 16px 15px 0 15px;
+    background-color: #fff;
+    border-top: 0;
+}
+
+.inputs {
+    text-align: left;
+    position: relative;
+    margin: 0 0 15px;
+    white-space: nowrap;
+    font-size: 0;
+
+    &::after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+
+    label {
+        width: auto;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 24px;
+        text-align: left;
+        margin-bottom: 5px;
+        display: block;
+        color: #1d1d1f;
+        margin-right: 10px;
+    }
+
+    input[type='password'] {
+        min-height: 48px;
+        background: #ffffff;
+        border: 1px solid #ebebeb;
+        border-radius: 8px;
+        width: 100%;
+        height: 48px;
+        padding: 8px;
+        vertical-align: middle;
+        font-size: 14px;
+        float: left;
+        padding-left: 16px;
+    }
+}
+
+.button {
+    margin-bottom: 16px;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+
+    button {
+        min-width: 140px;
+        border: none;
+        background-color: #0066cc;
+        border-radius: 8px;
+        padding: 10px 30px;
+        text-align: center;
+        font-size: 14px;
+        line-height: 21px;
+        color: #fff;
+        cursor: pointer;
+    }
+}

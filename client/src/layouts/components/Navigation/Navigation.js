@@ -9,10 +9,10 @@ function Navigation() {
         <div className={cx('wrapper')}>
             <ul className={cx('list')}>
                 <li className={cx('item')}>
-                    <Link to={`/`}>iPhone</Link>
+                    <Link to={`/categories/iPhone`}>iPhone</Link>
                 </li>
                 <li className={cx('item')}>
-                    <Link to={`/`}>iPad</Link>
+                    <Link to={`/categories/iPad`}>iPad</Link>
                 </li>
                 <li className={cx('item')}>
                     <Link to={`/`}>Mac</Link>
