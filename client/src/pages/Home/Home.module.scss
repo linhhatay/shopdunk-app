@@ -362,3 +362,121 @@
         // }
     }
 }
+
+.banner-bottom {
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 80px;
+
+    & > div {
+        margin-bottom: 50px;
+    }
+}
+
+.news-list {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.news {
+    &-title {
+        border-bottom: unset;
+        padding: 0 0 15px;
+        line-height: 45px;
+        color: #1d1d1f;
+        font-weight: 700;
+        font-size: 24px;
+        text-align: center;
+
+        strong {
+            font-weight: unset;
+        }
+    }
+
+    &-items {
+        display: grid;
+        grid-auto-rows: minmax(min-content, max-content);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+        margin-bottom: 32px;
+        overflow: hidden;
+        text-align: left;
+    }
+
+    &-item {
+        clear: both;
+        float: left;
+        background: #ffffff;
+        box-shadow: 0px 1px 8px rgb(0 0 0 / 4%);
+        border-radius: 8px;
+        position: relative;
+    }
+
+    &-picture {
+        position: relative;
+
+        a {
+            position: relative;
+
+            img {
+                width: 100%;
+                max-height: 218px;
+                object-fit: cover;
+                border-radius: 8px 8px 0 0;
+                background: #f7e8e8;
+                height: 176px;
+            }
+        }
+    }
+
+    &-head {
+        color: #1d1d1f;
+        font-size: 1.75rem;
+        font-weight: 500;
+        line-height: 1.2;
+
+        a {
+            display: inline-block;
+            padding: 25px 24px 15px 24px;
+            line-height: 24px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #1d1d1f;
+        }
+    }
+
+    &-dates {
+        display: block;
+        background-color: #fff;
+        font-size: 15px;
+        line-height: 24px;
+        color: #86868b;
+        margin: 0 0 24px;
+        padding: 10px 24px 0 24px;
+        font-style: normal;
+    }
+
+    &-view-all {
+        text-align: center;
+
+        a {
+            text-decoration: unset;
+            border: 1px solid #0066cc;
+            border-radius: 8px;
+            padding: 5.5px 45px;
+            color: #0066cc;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 27px;
+            display: inline-block;
+            vertical-align: middle;
+
+            &::after {
+                content: '\f054';
+                font-family: 'Font Awesome 5 Free';
+                font-weight: 900;
+                padding-left: 8px;
+            }
+        }
+    }
+}

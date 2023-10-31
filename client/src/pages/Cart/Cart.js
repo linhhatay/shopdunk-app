@@ -15,7 +15,15 @@ function Cart() {
     const cart = useSelector(getCart);
     const totalCartPrice = useSelector(getTotalCartPrice);
 
-    if (!cart.length) return <div className={cx('no-data')}>Giỏ hàng của bạn đang trống!</div>;
+    if (!cart.length)
+        return (
+            <>
+                <Breadcrumb className={cx('breadcrumb')} />
+                <div className={cx('content')}>
+                    <div className={cx('no-data')}>Giỏ hàng của bạn đang trống!</div>
+                </div>
+            </>
+        );
 
     const handlePayment = async (e) => {
         e.preventDefault();

@@ -141,6 +141,50 @@ function Home() {
                     </div>
                 </div>
             </div>
+            <div className={cx('banner-bottom')}>
+                <div>
+                    <div>
+                        <p>
+                            <a href="#">
+                                <img
+                                    src="https://shopdunk.com/images/uploaded/Trang%20ch%E1%BB%A7/2.jpeg"
+                                    alt=""
+                                    width={1200}
+                                    height={401}
+                                />
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div className={cx('news-list')}>
+                <h2 className={cx('news-title')}>
+                    <strong>Tin Tức</strong>
+                </h2>
+                <div className={cx('news-items')}>
+                    <div className={cx('news-item')}>
+                        <div className={cx('news-picture')}>
+                            <a href="#">
+                                <img
+                                    src="https://shopdunk.com/images/thumbs/0022649_apple-wwdc-2023-logo_1600.jpeg"
+                                    alt="news"
+                                />
+                            </a>
+                        </div>
+                        <h3 className={cx('news-head')}>
+                            <a href="#">
+                                Tiêu điểm cuối năm 2023: Tổng hợp sản phẩm MacBook và iMac mới nhất của Apple
+                            </a>
+                        </h3>
+                        <div className={cx('news-dates')}>
+                            <span>31/10/2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className={cx('news-view-all')}>
+                <a href="#">Xem tất cả Tin Tức</a>
+            </div>
         </div>
     );
 }
