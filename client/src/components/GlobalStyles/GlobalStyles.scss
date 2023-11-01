@@ -36,6 +36,10 @@ label {
     vertical-align: middle;
 }
 
+label + * {
+    vertical-align: middle;
+}
+
 strong {
     font-weight: bolder;
 }
