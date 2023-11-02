@@ -91,3 +91,65 @@ export const register = (data) => async (dispatch) => {
         return false;
     }
 };
+
+export const forgotPassword = (email) => async (dispatch) => {
+    try {
+        dispatch({ type: 'CALL_API_START' });
+
+        const response = await httpRequest.post('/users/forgotPassword', email);
+
+        dispatch({ type: 'FORGOT_PASSWORD_SUCCESS', payload: response.data.resetToken });
+
+        dispatch({ type: 'CALL_API_END' });
+    } catch (error) {
+        dispatch({ type: 'FORGOT_PASSWORD_FAILURE' });
+
+        dispatch({ type: 'CALL_API_END' });
+
+        dispatch({
+            type: 'SET_NOTIFY',
+            payload: {
+                message: error.message,
+                status: 'FAILURE',
+            },
+        });
+
+        throw error;
+    }
+};
+
+export const resetPassword =
+    ({ password, passwordConfirm, resetToken }) =>
+    async (dispatch) => {
+        try {
+            dispatch({ type: 'CALL_API_START' });
+
+            const response = await httpRequest.patch(`/users/resetPassword/${resetToken}`, {
+                password,
+                passwordConfirm,
+            });
+
+            dispatch({ type: 'RESET_PASSWORD_SUCCESS', payload: response });
+
+            dispatch({
+                type: 'CLEAR_NOTIFY',
+            });
+
+            dispatch({ type: 'CALL_API_END' });
+
+            return true;
+        } catch (error) {
+            dispatch({ type: 'RESET_PASSWORD_FAILURE' });
+
+            dispatch({ type: 'CALL_API_END' });
+
+            dispatch({
+                type: 'SET_NOTIFY',
+                payload: {
+                    message: error.message,
+                    status: 'FAILURE',
+                },
+            });
+            throw error;
+        }
+    };

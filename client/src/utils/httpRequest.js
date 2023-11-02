@@ -9,6 +9,20 @@ const axiosInstance = axios.create({
     },
 });
 
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const storage = JSON.parse(localStorage.getItem('persist:rootClient'));
+        const token = JSON.parse(storage.auth).token;
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    },
+);
+
 export const get = async (url, options = {}) => {
     try {
         const response = await axiosInstance.get(url, options);

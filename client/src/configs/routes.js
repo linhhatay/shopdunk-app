@@ -6,6 +6,7 @@ const routes = {
     register: '/register',
     login: '/login',
     forgotPassword: '/forgot-password',
+    resetPassword: '/reset-password',
     customerInfo: '/customer-info',
     category: '/categories/:category',
     orderDetails: '/order-details',

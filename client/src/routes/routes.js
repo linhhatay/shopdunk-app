@@ -8,6 +8,7 @@ import Login from '~/pages/Login';
 import Order from '~/pages/Order';
 import PageNotFound from '~/pages/PageNotFound';
 import Product from '~/pages/Product';
+import ResetPassword from '~/pages/ResetPassword';
 import Signup from '~/pages/Signup';
 
 const publicRoutes = [
@@ -21,6 +22,7 @@ const publicRoutes = [
     { path: config.routes.category, component: Category },
     { path: config.routes.orderDetails, component: Order },
     { path: config.routes.forgotPassword, component: ForgotPassword },
+    { path: config.routes.resetPassword, component: ResetPassword },
 ];
 
 const privateRoutes = [];

@@ -1,12 +1,33 @@
 import classNames from 'classnames/bind';
 import styles from './ForgotPassword.module.scss';
 import Breadcrumb from '~/components/Breadcrumb';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { forgotPassword } from '~/store/actions/authAction';
 
 const cx = classNames.bind(styles);
 
 function ForgotPassword() {
+    const [email, setEmail] = useState('');
+    const auth = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(forgotPassword({ email }));
+        setEmail('');
+    };
+
     return (
         <div className={cx('wrapper')}>
+            {auth.forgotPasswordData && (
+                <div className={cx('bar-notification')}>
+                    <div>
+                        <p>Email với hướng dẫn đã được gửi cho bạn.</p>
+                        <span></span>
+                    </div>
+                </div>
+            )}
             <Breadcrumb />
             <div className={cx('content')}>
                 <div>
@@ -23,7 +44,7 @@ function ForgotPassword() {
                                 </p>
                             </div>
                         </div>
-                        <form className={cx('form')}>
+                        <form className={cx('form')} onSubmit={handleSubmit}>
                             <div className={cx('form-title')}>
                                 <h1>Khôi phục mật khẩu</h1>
                             </div>
@@ -35,7 +56,7 @@ function ForgotPassword() {
                                 <div className={cx('form-fields')}>
                                     <div className={cx('form-group')}>
                                         <label>Email:</label>
-                                        <input type="text" />
+                                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                                     </div>
                                 </div>
                             </div>

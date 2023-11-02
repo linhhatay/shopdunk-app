@@ -5,6 +5,7 @@ import Breadcrumb from '~/components/Breadcrumb';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '~/store/actions/authAction';
+import config from '~/configs';
 
 const cx = classNames.bind(styles);
 
@@ -82,7 +83,7 @@ function Login() {
                                         <input type="checkbox" name="Username" />
                                         <label>Nhớ mật khẩu</label>
                                         <span className={cx('forgot-password')}>
-                                            <Link to="/">Quên mật khẩu?</Link>
+                                            <Link to={config.routes.forgotPassword}>Quên mật khẩu?</Link>
                                         </span>
                                     </div>
                                 </div>
