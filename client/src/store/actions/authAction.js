@@ -153,3 +153,40 @@ export const resetPassword =
             throw error;
         }
     };
+
+export const changePassword =
+    ({ passwordCurrent, password, passwordConfirm }) =>
+    async (dispatch) => {
+        try {
+            dispatch({ type: 'CALL_API_START' });
+
+            const response = await httpRequest.patch(`/users/updateMyPassword`, {
+                passwordCurrent,
+                password,
+                passwordConfirm,
+            });
+
+            dispatch({ type: 'CHANGE_PASSWORD_SUCCESS', payload: response });
+
+            dispatch({
+                type: 'CLEAR_NOTIFY',
+            });
+
+            dispatch({ type: 'CALL_API_END' });
+
+            return true;
+        } catch (error) {
+            dispatch({ type: 'CHANGE_PASSWORD_FAILURE' });
+
+            dispatch({ type: 'CALL_API_END' });
+
+            dispatch({
+                type: 'SET_NOTIFY',
+                payload: {
+                    message: error.message,
+                    status: 'FAILURE',
+                },
+            });
+            throw error;
+        }
+    };

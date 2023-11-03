@@ -174,3 +174,12 @@
         cursor: pointer;
     }
 }
+
+.field-validation-error {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    color: #e4434b;
+    margin-top: 5px;
+    float: left;
+}

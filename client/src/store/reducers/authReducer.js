@@ -10,6 +10,7 @@ const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'LOGIN_SUCCESS':
         case 'REGISTER_SUCCESS':
+        case 'CHANGE_PASSWORD_SUCCESS':
             return {
                 ...state,
                 isAuthenticated: true,
@@ -18,6 +19,7 @@ const authReducer = (state = initialState, action) => {
             };
         case 'LOGIN_FAILURE':
         case 'REGISTER_FAILURE':
+        case 'CHANGE_PASSWORD_FAILURE':
             return {
                 ...state,
                 isAuthenticated: false,
