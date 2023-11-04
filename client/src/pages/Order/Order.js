@@ -1,15 +1,18 @@
 import classNames from 'classnames/bind';
 import styles from './Order.module.scss';
-import { useSelector } from 'react-redux';
-import { getCart, getTotalCartPrice } from '~/store/actions/cartAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCart, getCart, getTotalCartPrice } from '~/store/actions/cartAction';
 import * as httpRequest from '~/utils/httpRequest';
+import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '~/utils/helpers';
 
 const cx = classNames.bind(styles);
 
 function Order() {
     const totalCartPrice = useSelector(getTotalCartPrice);
     const cart = useSelector(getCart);
-    console.log(cart);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handlePayment = async (e) => {
         e.preventDefault();
@@ -23,7 +26,7 @@ function Order() {
 
             // Gửi yêu cầu POST đến API tạo thanh toán
             const response = await httpRequest.post('/orders/create_payment_url', paymentData);
-            console.log(response);
+            dispatch(clearCart());
             // Xử lý phản hồi từ API, ví dụ: chuyển hướng đến URL thanh toán
             if (response && response.paymentUrl) {
                 window.location.href = response.paymentUrl;
@@ -92,7 +95,7 @@ function Order() {
                                                 <span>Sản phẩm</span>
                                             </div>
                                             {cart.map((item) => (
-                                                <div className={cx('products-item')}>
+                                                <div className={cx('products-item')} key={item._id}>
                                                     <div className={cx('item-box')}>
                                                         <a>{item.name} - ₫</a>
                                                         <div className={cx('attributes')}>
@@ -122,7 +125,7 @@ function Order() {
                                                             </td>
                                                             <td className={cx('cart-total-right')}>
                                                                 <span>
-                                                                    <strong>{totalCartPrice}₫</strong>
+                                                                    <strong>{formatCurrency(totalCartPrice)}</strong>
                                                                 </span>
                                                             </td>
                                                         </tr>
@@ -142,7 +145,7 @@ function Order() {
                                     </div>
                                 </div>
                                 <div className={cx('buttons')}>
-                                    <button> Tiếp tục mua hàng </button>
+                                    <button onClick={() => navigate('/')}> Tiếp tục mua hàng </button>
                                     <button onClick={handlePayment}> Thanh toán </button>
                                 </div>
                             </div>

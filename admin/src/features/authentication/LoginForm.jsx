@@ -2,9 +2,19 @@ import { useState } from "react";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import Input from "../../ui/Input";
-import FormRow from "../../ui/FormRow";
+// import FormRow from "../../ui/FormRow";
 import { useLogin } from "./useLogin";
 import SpinnerMini from "../../ui/SpinnerMini";
+import styled from "styled-components";
+
+const FormRow = styled.div`
+  padding: 1.2rem 0;
+`;
+
+const Label = styled.label`
+  display: block;
+  font-weight: 500;
+`;
 
 function LoginForm() {
   const [email, setEmail] = useState("admin");
@@ -28,6 +38,7 @@ function LoginForm() {
   return (
     <Form onSubmit={handleSubmit}>
       <FormRow label="Email address">
+        <Label>Email address</Label>
         <Input
           id="email"
           // This makes this form better for password managers
@@ -38,6 +49,7 @@ function LoginForm() {
         />
       </FormRow>
       <FormRow label="Password">
+        <Label>Password</Label>
         <Input
           type="password"
           id="password"

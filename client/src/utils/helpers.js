@@ -1,5 +1,5 @@
 export const formatCurrency = (value) =>
-    new Intl.NumberFormat('en', { style: 'currency', currency: 'VND', currencyDisplay: 'narrowSymbol' }).format(value);
+    new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value).replace(/\s+/g, '');
 
 export function calculateDiscountedPrice(originalPrice, discount) {
     if (originalPrice < 0 || discount < 0 || discount > 100) {

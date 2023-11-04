@@ -7,6 +7,7 @@ import { addItem } from '~/store/actions/cartAction';
 import { useDispatch } from 'react-redux';
 import config from '~/configs';
 import PageNotFound from '../PageNotFound';
+import { calculateDiscountedPrice, formatCurrency } from '~/utils/helpers';
 
 const cx = classNames.bind(styles);
 
@@ -107,10 +108,17 @@ function Product() {
                                         <div className={cx('prices')}>
                                             <div>
                                                 <div className={cx('current-price')}>
-                                                    <span>21.490.000₫</span>
+                                                    <span>
+                                                        {calculateDiscountedPrice(
+                                                            product.colors?.at(selectedColor).price,
+                                                            product.discount,
+                                                        )}
+                                                    </span>
                                                 </div>
                                                 <div className={cx('old-price')}>
-                                                    <span>24.990.000₫</span>
+                                                    <span>
+                                                        {formatCurrency(product.colors?.at(selectedColor).price)}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>

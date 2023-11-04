@@ -25,7 +25,7 @@ function Sell() {
                                     </div>
                                     <div className={cx('product-details')}>
                                         <div className={cx('product-title')}>
-                                            <a href="/op-lung-silicon-magsafe-cho-iphone-15-pro" tabindex="0">
+                                            <a href="/op-lung-silicon-magsafe-cho-iphone-15-pro" tabIndex="0">
                                                 Ốp Lưng Silicon MagSafe cho iPhone 15 Pro
                                             </a>
                                             <div className={cx('product-add-info')}>

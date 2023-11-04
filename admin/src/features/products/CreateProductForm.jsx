@@ -30,6 +30,7 @@ function CreateProductForm({ productToEdit = {}, onCloseModal }) {
       category,
       description,
       imageCover,
+      images,
       discount,
       storageCapacity,
       color,
@@ -49,6 +50,7 @@ function CreateProductForm({ productToEdit = {}, onCloseModal }) {
         quantity: data.quantity[index],
       }));
     }
+    const uploadedImages = Array.from(images);
 
     const formData = new FormData();
     formData.append("name", name);
@@ -58,6 +60,18 @@ function CreateProductForm({ productToEdit = {}, onCloseModal }) {
     formData.append("storageCapacity", storageCapacity);
 
     formData.append("imageCover", imageCover[0]);
+    // formData.append("images", images[0]);
+
+    uploadedImages.forEach((image, index) => {
+      formData.append(`images`, image);
+    });
+
+    // for (let i = 0; i < uploadedImages.length; i++) {
+    //   formData.append(`images[]`, uploadedImages[i]);
+    // }
+    // console.log(imageFiles);
+
+    // formData.append("images", imageFiles);
 
     colorData.forEach((color, index) => {
       formData.append(`colors[${index}][name]`, color.name);
@@ -66,7 +80,7 @@ function CreateProductForm({ productToEdit = {}, onCloseModal }) {
     });
 
     if (isEditSession) {
-      if (typeof imageCover !== "string") {
+      if (typeof imageCover !== "string" || typeof images !== "string") {
         editProduct(
           { formData, editId },
           {
@@ -83,6 +97,7 @@ function CreateProductForm({ productToEdit = {}, onCloseModal }) {
             category,
             description,
             imageCover,
+            images,
             discount,
             storageCapacity,
             colors: colorData,
@@ -183,6 +198,7 @@ function CreateProductForm({ productToEdit = {}, onCloseModal }) {
     <Form
       onSubmit={handleSubmit(onSubmit, onError)}
       type={onCloseModal ? "modal" : "regular"}
+      encType="multipart/form-data"
     >
       <FormRow label={"Name"} error={errors?.name?.message}>
         <Input
@@ -267,6 +283,7 @@ function CreateProductForm({ productToEdit = {}, onCloseModal }) {
         <FileInput
           id="images"
           accept="image/*"
+          multiple
           {...register("images")}
           disabled={isWorking}
         />

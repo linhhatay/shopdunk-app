@@ -6,6 +6,7 @@ import ForgotPassword from '~/pages/ForgotPassword';
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
 import Order from '~/pages/Order';
+import OrderReturn from '~/pages/OrderReturn';
 import PageNotFound from '~/pages/PageNotFound';
 import Product from '~/pages/Product';
 import ResetPassword from '~/pages/ResetPassword';
@@ -23,6 +24,7 @@ const publicRoutes = [
     { path: config.routes.orderDetails, component: Order },
     { path: config.routes.forgotPassword, component: ForgotPassword },
     { path: config.routes.resetPassword, component: ResetPassword },
+    { path: config.routes.orderReturns, component: OrderReturn },
 ];
 
 const privateRoutes = [];

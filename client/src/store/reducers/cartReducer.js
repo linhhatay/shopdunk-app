@@ -5,10 +5,22 @@ const initialState = {
 function cartReducer(state = initialState, action) {
     switch (action.type) {
         case 'ADD_ITEM':
-            return {
-                ...state,
-                cart: [...state.cart, action.payload],
-            };
+            const existingItem = state.cart.findIndex(
+                (item) => item._id === action.payload._id && item.color.name === action.payload.color.name,
+            );
+            if (existingItem !== -1) {
+                return {
+                    ...state,
+                    cart: state.cart.map((item) =>
+                        item._id === action.payload._id ? { ...item, quantity: item.quantity + 1 } : item,
+                    ),
+                };
+            } else {
+                return {
+                    ...state,
+                    cart: [...state.cart, { ...action.payload, quantity: 1 }],
+                };
+            }
         case 'DELETE_ITEM':
             return {
                 ...state,
@@ -18,7 +30,7 @@ function cartReducer(state = initialState, action) {
             return {
                 ...state,
                 cart: state.cart.map((item) =>
-                    item._id === action.payload
+                    item._id === action.payload._id && item.color.name === action.payload.color.name
                         ? {
                               ...item,
                               quantity: item.quantity + 1,
@@ -28,7 +40,7 @@ function cartReducer(state = initialState, action) {
             };
         case 'DECREASE_ITEM_QUANTITY':
             const updatedCart = state.cart.map((item) => {
-                if (item._id === action.payload) {
+                if (item._id === action.payload._id && item.color.name === action.payload.color.name) {
                     return {
                         ...item,
                         quantity: item.quantity - 1,

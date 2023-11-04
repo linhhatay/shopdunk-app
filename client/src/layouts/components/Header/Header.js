@@ -23,10 +23,17 @@ function Header({ onSearchForm }) {
         if (res) navigate('/');
     };
 
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
-                <div className={cx('logo')}>
+                <div className={cx('logo')} onClick={scrollToTop}>
                     <Link to="/">
                         <h1>
                             <img alt="logo" src="https://shopdunk.com/images/thumbs/0012445_Logo_ShopDunk.png" />
@@ -43,7 +50,7 @@ function Header({ onSearchForm }) {
                         </Link>
                     </div>
                     <div className={cx('auth-icon')}>
-                        <Link to="/">
+                        <Link to={config.routes.login}>
                             <img src="https://shopdunk.com/images/uploaded-source/icon/login.png" alt="" />
                         </Link>
                     </div>
@@ -62,7 +69,7 @@ function Header({ onSearchForm }) {
                                 ) : (
                                     <>
                                         <li className={cx('register')}>
-                                            <Link to="/">Tài khoản của tôi</Link>
+                                            <Link to={config.routes.customerInfo}>Tài khoản của tôi</Link>
                                         </li>
                                         <li className={cx('login')}>
                                             <Link to="/" onClick={handleLogout}>

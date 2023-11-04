@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import * as httpRequest from '~/utils/httpRequest';
-import { calculateDiscountedPrice, formatCurrency } from '~/utils/helpers';
+import Product from '~/components/Product';
 
 const cx = classNames.bind(styles);
 
@@ -85,55 +85,14 @@ function Home() {
                                     <div className={cx('featured-product-grid')}>
                                         <div className={cx('item-grid')}>
                                             {products.length > 0 &&
-                                                products.map((product) => (
-                                                    <div className={cx('item-box')} key={product._id}>
-                                                        <div className={cx('product-item')}>
-                                                            <div className={cx('product-tag')}>
-                                                                <img
-                                                                    src="https://shopdunk.com/images/uploaded/icon/new.png"
-                                                                    alt=""
-                                                                />
-                                                            </div>
-                                                            <div className={cx('picture')}>
-                                                                <Link to={`/${product._id}`}>
-                                                                    <img
-                                                                        alt={product.name}
-                                                                        src={`http://localhost:8000/img/products/${product.imageCover}`}
-                                                                        title={product.name}
-                                                                    />
-                                                                </Link>
-                                                            </div>
-                                                            <div className={cx('details')}>
-                                                                <h3>
-                                                                    <Link to={`/${product._id}`}>{product.name}</Link>
-                                                                </h3>
-                                                                <div className={cx('add-info')}>
-                                                                    <div className={cx('prices')}>
-                                                                        <div className={cx('price-ratio-container')}>
-                                                                            <span>{`-${product.discount}%`}</span>
-                                                                        </div>
-                                                                        <span className={cx('old-price')}>
-                                                                            {formatCurrency(product.colors.at(0).price)}
-                                                                        </span>
-                                                                        <span className={cx('actual-price')}>
-                                                                            {calculateDiscountedPrice(
-                                                                                product.colors.at(0).price,
-                                                                                product.discount,
-                                                                            )}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ))}
+                                                products.map((product) => <Product data={product} key={product._id} />)}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className={cx('show-all')}>
-                            <Link to="/">
+                            <Link to={`/categories/iPhone`}>
                                 {` Xem tất cả iPhone `}
                                 <FontAwesomeIcon icon={faChevronRight} />
                             </Link>

@@ -8,6 +8,7 @@ import Sell from './Sell';
 import Checkout from './Checkout';
 import config from '~/configs';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '~/utils/helpers';
 
 const cx = classNames.bind(styles);
 
@@ -63,8 +64,8 @@ function Cart() {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {cart.map((item) => (
-                                                        <CartItem item={item} key={item._id} />
+                                                    {cart.map((item, index) => (
+                                                        <CartItem item={item} key={index} />
                                                     ))}
                                                 </tbody>
                                             </table>
@@ -72,7 +73,7 @@ function Cart() {
                                         <div>
                                             <div className={cx('options')}>
                                                 <button>Cập nhật giỏ hàng</button>
-                                                <button>Tiếp tục mua sắm</button>
+                                                <button onClick={() => navigate('/')}>Tiếp tục mua sắm</button>
                                             </div>
                                         </div>
                                     </div>
@@ -101,7 +102,7 @@ function Cart() {
                                                                     <label>Tổng phụ:</label>
                                                                 </td>
                                                                 <td>
-                                                                    <span>{totalCartPrice}₫</span>
+                                                                    <span>{formatCurrency(totalCartPrice)}</span>
                                                                 </td>
                                                             </tr>
                                                             <tr className={cx('order-total')}>
@@ -109,7 +110,7 @@ function Cart() {
                                                                     <label>Tổng cộng:</label>
                                                                 </td>
                                                                 <td>
-                                                                    <span>{totalCartPrice}₫</span>
+                                                                    <span>{formatCurrency(totalCartPrice)}</span>
                                                                 </td>
                                                             </tr>
                                                         </tbody>

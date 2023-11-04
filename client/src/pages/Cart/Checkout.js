@@ -30,10 +30,22 @@ function Checkout() {
                                     </div>
                                     <div className={cx('tt_receive_method')}>Hình thức nhận hàng</div>
                                     <div className={cx(['inputs', 'one-col', 'receive-method'])}>
-                                        <input type="radio" id="receive-store" name="receive" value="0" checked="" />
-                                        <label for="receive_store">Nhận tại cửa hàng</label>
-                                        <input type="radio" id={cx('receive-home')} name="receive" value="1" checked />
-                                        <label for="receive_home">Giao tận nơi</label>
+                                        <input
+                                            type="radio"
+                                            id="receive-store"
+                                            name="receive"
+                                            value="0"
+                                            defaultChecked={true}
+                                        />
+                                        <label htmlFor="receive_store">Nhận tại cửa hàng</label>
+                                        <input
+                                            type="radio"
+                                            id={cx('receive-home')}
+                                            name="receive"
+                                            value="1"
+                                            defaultChecked={true}
+                                        />
+                                        <label htmlFor="receive_home">Giao tận nơi</label>
                                     </div>
                                     <div className={cx(['inputs', 'two-col', 'left'])}>
                                         <label>Tỉnh, thành phố:</label>
@@ -74,7 +86,7 @@ function Checkout() {
                                     <div className={cx('method-name')}>
                                         <div className={cx('payment-details')}>
                                             <div className={cx('payment-radio')}>
-                                                <input type="radio" checked />
+                                                <input type="radio" defaultChecked={true} />
                                             </div>
                                             <div className={cx('payment-logo')}>
                                                 <label>

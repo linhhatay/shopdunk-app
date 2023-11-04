@@ -1,3 +1,5 @@
+import { calculateDiscountedPrice } from '~/utils/helpers';
+
 export function addItem(newItem) {
     return {
         type: 'ADD_ITEM',
@@ -5,24 +7,24 @@ export function addItem(newItem) {
     };
 }
 
-export function deleteItem(pizzaId) {
+export function deleteItem(productId) {
     return {
         type: 'DELETE_ITEM',
-        payload: pizzaId,
+        payload: productId,
     };
 }
 
-export function increaseItemQuantity(pizzaId) {
+export function increaseItemQuantity(productId) {
     return {
         type: 'INCREASE_ITEM_QUANTITY',
-        payload: pizzaId,
+        payload: productId,
     };
 }
 
-export function decreaseItemQuantity(pizzaId) {
+export function decreaseItemQuantity(productId) {
     return {
         type: 'DECREASE_ITEM_QUANTITY',
-        payload: pizzaId,
+        payload: productId,
     };
 }
 
@@ -37,6 +39,10 @@ export const getCart = (state) => state.cart.cart;
 export const getTotalCartQuantity = (state) => state.cart.cart.reduce((sum, item) => sum + item.quantity, 0);
 
 export const getTotalCartPrice = (state) =>
-    state.cart.cart.reduce((sum, item) => sum + item.color.price * item.quantity, 0);
+    state.cart.cart.reduce((sum, item) => {
+        const priceWithoutCurrency = calculateDiscountedPrice(item.color.price, item.discount).replace(/[^\d.]/g, '');
+        return sum + parseFloat(priceWithoutCurrency.replaceAll('.', '')) * item.quantity;
+    }, 0);
 
-export const getCurrentQuantityById = (id) => (state) => state.cart.cart.find((item) => item._id === id)?.quantity ?? 0;
+export const getCurrentQuantityById = (id, colorName) => (state) =>
+    state.cart.cart.find((item) => item._id === id && item.color.name === colorName)?.quantity ?? 0;

@@ -3,18 +3,47 @@ const router = express.Router();
 const request = require("request");
 const moment = require("moment");
 
-// const orderController = require("../controllers/orderController");
+const orderController = require("../controllers/orderController");
 
-// router
-//   .route("/")
-//   .get(orderController.getAllOrders)
-//   .post(orderController.createOrder);
+router
+  .route("/")
+  .get(orderController.getAllOrders)
+  .post(orderController.createOrder);
 
-// router
-//   .route("/:id")
-//   .get(orderController.getOrder)
-//   .patch(orderController.updateOrder)
-//   .delete(orderController.deleteOrder);
+router.get("/vnpay_return", function (req, res, next) {
+  let vnp_Params = req.query;
+
+  let secureHash = vnp_Params["vnp_SecureHash"];
+
+  delete vnp_Params["vnp_SecureHash"];
+  delete vnp_Params["vnp_SecureHashType"];
+
+  vnp_Params = sortObject(vnp_Params);
+
+  let config = require("config");
+  let tmnCode = config.get("vnp_TmnCode");
+  let secretKey = config.get("vnp_HashSecret");
+
+  let querystring = require("qs");
+  let signData = querystring.stringify(vnp_Params, { encode: false });
+  let crypto = require("crypto");
+  let hmac = crypto.createHmac("sha512", secretKey);
+  let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+
+  if (secureHash === signed) {
+    //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
+
+    res.json({ code: vnp_Params["vnp_ResponseCode"] });
+  } else {
+    res.json({ code: "97" });
+  }
+});
+
+router
+  .route("/:id")
+  .get(orderController.getOrder)
+  .patch(orderController.updateOrder)
+  .delete(orderController.deleteOrder);
 
 router.get("/", function (req, res, next) {
   res.render("orderlist", { title: "Danh sách đơn hàng" });
@@ -88,36 +117,8 @@ router.post("/create_payment_url", function (req, res, next) {
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
 
+  console.log(vnpUrl);
   res.status(200).json({ paymentUrl: vnpUrl });
-});
-
-router.get("/vnpay_return", function (req, res, next) {
-  let vnp_Params = req.query;
-
-  let secureHash = vnp_Params["vnp_SecureHash"];
-
-  delete vnp_Params["vnp_SecureHash"];
-  delete vnp_Params["vnp_SecureHashType"];
-
-  vnp_Params = sortObject(vnp_Params);
-
-  let config = require("config");
-  let tmnCode = config.get("vnp_TmnCode");
-  let secretKey = config.get("vnp_HashSecret");
-
-  let querystring = require("qs");
-  let signData = querystring.stringify(vnp_Params, { encode: false });
-  let crypto = require("crypto");
-  let hmac = crypto.createHmac("sha512", secretKey);
-  let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
-
-  if (secureHash === signed) {
-    //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-
-    res.json({ code: vnp_Params["vnp_ResponseCode"] });
-  } else {
-    res.json({ code: "97" });
-  }
 });
 
 router.get("/vnpay_ipn", function (req, res, next) {

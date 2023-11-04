@@ -4,6 +4,7 @@ import Breadcrumb from '~/components/Breadcrumb';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import * as httpRequest from '~/utils/httpRequest';
+import Product from '~/components/Product';
 
 const cx = classNames.bind(styles);
 
@@ -78,7 +79,7 @@ function Category() {
                         <div className={cx('content-inner')}>
                             <div className={cx('card')}>
                                 <div className={cx('title')}>
-                                    <h1>iPad</h1>
+                                    <h1>{category}</h1>
                                 </div>
                                 <div>
                                     <div className={cx('banner')}>
@@ -124,44 +125,7 @@ function Category() {
                                         <div>
                                             <div className={cx('product-grid')}>
                                                 {products.map((item) => (
-                                                    <div className={cx('product-item')} key={item._id}>
-                                                        <div className={cx('product-box')}>
-                                                            <div>
-                                                                <div className={cx('product-tag')}>
-                                                                    <img
-                                                                        src="https://shopdunk.com/images/uploaded/icon/xatonkho.png"
-                                                                        alt=""
-                                                                    />
-                                                                </div>
-                                                                <div className={cx('product-picture')}>
-                                                                    <a href="/">
-                                                                        <img
-                                                                            src="https://shopdunk.com/images/thumbs/0000594_ipad-air-4_240.png"
-                                                                            alt="product"
-                                                                        />
-                                                                    </a>
-                                                                </div>
-                                                                <div className={cx('product-details')}>
-                                                                    <h2>
-                                                                        <a href="/">{item.name}</a>
-                                                                    </h2>
-                                                                    <div className={cx('product-add-info')}>
-                                                                        <div className={cx('prices')}>
-                                                                            <div className={cx('price-ratio')}>
-                                                                                <span>-25%</span>
-                                                                            </div>
-                                                                            <div className={cx('price-old')}>
-                                                                                19.990.000₫
-                                                                            </div>
-                                                                            <div className={cx('price-current')}>
-                                                                                14.990.000₫
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <Product data={item} key={item._id} />
                                                 ))}
                                             </div>
                                             <div className={cx('pager')}>

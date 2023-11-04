@@ -7,12 +7,15 @@ import {
     deleteItem,
 } from '~/store/actions/cartAction';
 import { useDispatch, useSelector } from 'react-redux';
+import { calculateDiscountedPrice } from '~/utils/helpers';
+
 const cx = classNames.bind(styles);
 
 function CartItem({ item }) {
     const dispatch = useDispatch();
 
-    const currentQuantity = useSelector(getCurrentQuantityById(item._id));
+    const currentQuantity = useSelector(getCurrentQuantityById(item._id, item.color.name));
+
     return (
         <tr>
             <td className={cx('sku')}>
@@ -36,7 +39,9 @@ function CartItem({ item }) {
             </td>
             <td className={cx('unit-price')}>
                 {/* <label className={cx('td-title')}>Giá bán:</label> */}
-                <span className={cx('product-unit-price')}>{item.color.price}₫</span>
+                <span className={cx('product-unit-price')}>
+                    {calculateDiscountedPrice(item.color.price, item.discount)}
+                </span>
             </td>
             <td className={cx('quantity')}>
                 <div className={cx('quantity-input-container')}>
@@ -47,7 +52,7 @@ function CartItem({ item }) {
                         viewBox="0 0 11 11"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        onClick={() => dispatch(decreaseItemQuantity(item._id))}
+                        onClick={() => dispatch(decreaseItemQuantity(item))}
                     >
                         <g clipPath="url(#clip0_10158_65576)">
                             <path
@@ -69,7 +74,7 @@ function CartItem({ item }) {
                         viewBox="0 0 12 13"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        onClick={() => dispatch(increaseItemQuantity(item._id))}
+                        onClick={() => dispatch(increaseItemQuantity(item))}
                     >
                         <g clipPath="url(#clip0_10158_65579)">
                             <path

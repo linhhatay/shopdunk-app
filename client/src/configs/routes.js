@@ -1,5 +1,6 @@
 const routes = {
     home: '/',
+    orderReturns: '/order/vnpay_return',
     product: '/:id',
     cart: '/cart',
     pageNotFound: '/page-not-found',

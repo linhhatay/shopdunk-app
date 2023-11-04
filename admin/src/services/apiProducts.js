@@ -6,7 +6,7 @@ export async function getProducts() {
 }
 
 export async function deleteProduct(id) {
-  const res = await fetch(`http://localhost:8000/api/v1/products/${id}`, {
+  await fetch(`http://localhost:8000/api/v1/products/${id}`, {
     method: "DELETE",
     mode: "cors",
     cache: "no-cache",
@@ -15,19 +15,17 @@ export async function deleteProduct(id) {
       "Content-Type": "application/json",
     },
   });
-  const data = await res.json();
-
-  return data;
 }
 
 export async function createProduct(newProduct) {
+  console.log(newProduct);
   const res = await fetch("http://localhost:8000/api/v1/products", {
     method: "POST",
     mode: "cors",
     cache: "no-cache",
     credentials: "same-origin",
     headers: {
-      // "Content-Type": "application/json",
+      // "Content-Type": "multipart/form-data",
     },
     redirect: "follow",
     referrerPolicy: "no-referrer",
