@@ -3,7 +3,7 @@ import styles from './Order.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearCart, getCart, getTotalCartPrice } from '~/store/actions/cartAction';
 import * as httpRequest from '~/utils/httpRequest';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { formatCurrency } from '~/utils/helpers';
 
 const cx = classNames.bind(styles);
@@ -13,6 +13,7 @@ function Order() {
     const cart = useSelector(getCart);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { state } = useLocation();
 
     const handlePayment = async (e) => {
         e.preventDefault();
@@ -22,6 +23,18 @@ function Order() {
                 amount: Math.round(totalCartPrice),
                 bankCode: '',
                 language: 'vn',
+                ...state,
+                paymentMethod: 'VNPay',
+                products: [
+                    ...cart.map((product) => {
+                        return {
+                            productItem: product._id,
+                            color: product.color.name,
+                            quantity: product.quantity,
+                            unitPrice: product.color.price,
+                        };
+                    }),
+                ],
             };
 
             // Gửi yêu cầu POST đến API tạo thanh toán

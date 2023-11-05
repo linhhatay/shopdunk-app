@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
+    orderId: {
+      type: "string",
+    },
     orderNumber: {
       type: String,
       unique: true,
@@ -15,9 +18,9 @@ const orderSchema = new mongoose.Schema(
       default: "Pending",
     },
     customer: {
-      type: mongoose.Schema.ObjectId,
-      ref: "User",
-      required: true,
+      fullName: String,
+      phoneNumber: String,
+      email: String,
     },
     shippingAddress: {
       type: String,
@@ -84,15 +87,15 @@ orderSchema.pre("save", function (next) {
   next();
 });
 
-orderSchema.pre("save", function (next) {
-  const totalAmount = this.products.reduce((acc, product) => {
-    return acc + product.quantity * product.unitPrice;
-  }, 0);
+// orderSchema.pre("save", function (next) {
+//   const totalAmount = this.products.reduce((acc, product) => {
+//     return acc + product.quantity * product.unitPrice;
+//   }, 0);
 
-  this.totalAmount = totalAmount;
+//   this.totalAmount = totalAmount;
 
-  next();
-});
+//   next();
+// });
 
 const Order = mongoose.model("Order", orderSchema);
 

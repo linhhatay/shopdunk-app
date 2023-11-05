@@ -3,7 +3,7 @@ import styles from './Checkout.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Checkout() {
+function Checkout({ register }) {
     return (
         <>
             <div className={cx('title')}>Thông tin thanh toán</div>
@@ -20,13 +20,28 @@ function Checkout() {
                             <div className={cx('enter-address')}>
                                 <div className={cx('edit-address')}>
                                     <div className={cx('inputs')}>
-                                        <input type="text" placeholder="Tên" />
+                                        <input
+                                            type="text"
+                                            placeholder="Tên"
+                                            name="fullName"
+                                            {...register('fullName', { required: 'Trường bắt buộc.' })}
+                                        />
                                     </div>
                                     <div className={cx(['inputs', 'two-col', 'left'])}>
-                                        <input type="text" placeholder="Số điện thoại" />
+                                        <input
+                                            type="text"
+                                            placeholder="Số điện thoại"
+                                            name="phoneNumber"
+                                            {...register('phoneNumber', { required: 'Trường bắt buộc.' })}
+                                        />
                                     </div>
                                     <div className={cx(['inputs', 'two-col', 'right'])}>
-                                        <input type="text" placeholder="Email" />
+                                        <input
+                                            type="text"
+                                            placeholder="Email"
+                                            name="email"
+                                            {...register('email', { required: 'Trường bắt buộc.' })}
+                                        />
                                     </div>
                                     <div className={cx('tt_receive_method')}>Hình thức nhận hàng</div>
                                     <div className={cx(['inputs', 'one-col', 'receive-method'])}>
@@ -60,7 +75,11 @@ function Checkout() {
                                     <div className={cx('all-receive-home')}>
                                         <div className={cx(['inputs', 'one-col'])}>
                                             <label>Địa chỉ cụ thể:</label>
-                                            <input type="text" />
+                                            <input
+                                                type="text"
+                                                name="address"
+                                                {...register('address', { required: 'Trường bắt buộc.' })}
+                                            />
                                         </div>
                                     </div>
                                 </div>

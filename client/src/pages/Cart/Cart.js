@@ -9,6 +9,8 @@ import Checkout from './Checkout';
 import config from '~/configs';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '~/utils/helpers';
+import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +18,8 @@ function Cart() {
     const cart = useSelector(getCart);
     const totalCartPrice = useSelector(getTotalCartPrice);
     const navigate = useNavigate();
+    const { register, formState, getValues, handleSubmit, reset } = useForm();
+    const [checked, setChecked] = useState(false);
 
     if (!cart.length)
         return (
@@ -28,7 +32,16 @@ function Cart() {
         );
 
     const handleToPayment = () => {
-        navigate(config.routes.orderDetails);
+        const values = getValues();
+        const checkInfo = Object.values(values).every((value) => value);
+        if (!checkInfo) return alert('Vui lòng điền đầy đủ thông tin.');
+        if (!checked) return alert('Vui lòng chấp nhận các điều khoản dịch vụ trước bước tiếp theo.');
+
+        navigate(config.routes.orderDetails, {
+            state: {
+                ...values,
+            },
+        });
     };
 
     return (
@@ -78,7 +91,7 @@ function Cart() {
                                         </div>
                                     </div>
                                     <Sell />
-                                    <Checkout />
+                                    <Checkout register={register} />
                                 </div>
                                 <div className={cx('checkout')}>
                                     <div className={cx('checkout-inner')}>
@@ -119,7 +132,11 @@ function Cart() {
                                                 <div className={cx('terms-of-service')}>
                                                     <div>
                                                         <div className={cx('terms-of-service-input')}>
-                                                            <input type="checkbox" />
+                                                            <input
+                                                                type="checkbox"
+                                                                value={checked}
+                                                                onChange={() => setChecked((c) => !c)}
+                                                            />
                                                         </div>
                                                         <label htmlFor="termsofservice">
                                                             <span className="rule-web">Tôi đã đọc và đồng ý với</span>
